@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r message=FALSE, warning=FALSE}
-#install.packages("tidyverse")
+install.packages("tidyverse")
 library("tidyverse")
 ```
 

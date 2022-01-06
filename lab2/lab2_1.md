@@ -1,8 +1,8 @@
 ---
 title: "Objects, Classes & NAs"
-date: "2022-01-04"
+date: "2022-01-06"
 output:
-  html_document:
+  html_document: 
     keep_md: yes
     theme: spacelab
     toc: yes
@@ -99,6 +99,20 @@ mean(venom_GT, chiron, veyron)
 
 ```
 ## [1] 270
+```
+above is incorrect because R is only seeing the first value. Creating a vactor is the correct way to find the mean:
+
+```r
+x <- c(venom_GT, chiron, veyron)
+```
+
+
+```r
+mean(x)
+```
+
+```
+## [1] 266.3333
 ```
 
 ## Types of Data

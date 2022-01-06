@@ -2,7 +2,7 @@
 title: "Objects, Classes & NAs"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_document: 
     keep_md: yes
     theme: spacelab
     toc: yes
@@ -75,6 +75,14 @@ veyron <- 268
 3. Use the function `mean()` to calculate the mean top speed for the cars.
 ```{r}
 mean(venom_GT, chiron, veyron)
+```
+above is incorrect because R is only seeing the first value. Creating a vactor is the correct way to find the mean:
+```{r}
+x <- c(venom_GT, chiron, veyron)
+```
+
+```{r}
+mean(x)
 ```
 
 ## Types of Data

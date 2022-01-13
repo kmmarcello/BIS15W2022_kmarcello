@@ -40,10 +40,6 @@ dim(sleep)
 anyNA(sleep)
 ```
 
-```{r}
-is.na(sleep)
-```
-
 5. Show a list of the column names is this data frame.
 ```{r}
 colnames(sleep)
@@ -59,34 +55,43 @@ table(sleep$vore)
 
 7. We are interested in two groups; small and large mammals. Let's define small as less than or equal to 1kg body weight and large as greater than or equal to 200kg body weight. Make two new dataframes (large and small) based on these parameters.
 ```{r}
-
+large_mammals <- subset(sleep, bodywt>=200)
+large_mammals
+```
+```{r}
+small_mammals <- subset(sleep, bodywt<=1)
+small_mammals
 ```
 
 8. What is the mean weight for both the small and large mammals?
 ```{r}
-
+mean_small_bodywt <- (small_mammals$bodywt)
+mean(mean_small_bodywt)
 ```
 
 ```{r}
-
+mean_large_bodywt <- (large_mammals$bodywt)
+mean(mean_large_bodywt)
 ```
 
-9. Using a similar approach as above, do large or small animals sleep longer on average?  
+9. Using a similar approach as above, do large or small animals sleep longer on average? small 
 ```{r}
-
+mean_small_sleeptot <-(small_mammals$sleep_total)
+mean(mean_small_sleeptot)
 ```
 
 ```{r}
-
+mean_large_sleeptot <-(large_mammals$sleep_total)
+mean(mean_large_sleeptot)
 ```
 
 10. Which animal is the sleepiest among the entire dataframe?
 ```{r}
-
+max_sleeptot <- max(sleep$sleep_total)
+max_sleeptot
 ```
-
+I cannot figure this out!!!
 ```{r}
-
 ```
 
 ## Push your final code to GitHub!

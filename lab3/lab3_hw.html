@@ -269,10 +269,12 @@ mean(mean_large_sleeptot)</code></pre>
 <ol start="10" style="list-style-type: decimal">
 <li>Which animal is the sleepiest among the entire dataframe?</li>
 </ol>
-<pre class="r"><code>max_sleeptot &lt;- max(sleep$sleep_total)
-max_sleeptot</code></pre>
+<pre class="r"><code>max(sleep$sleep_total)</code></pre>
 <pre><code>## [1] 19.9</code></pre>
 <p>I cannot figure this out!!!</p>
+<pre class="r"><code>mammal_max_sleep &lt;- sleep$name[(which.max(sleep$sleep_total))]
+mammal_max_sleep</code></pre>
+<pre><code>## [1] &quot;Little brown bat&quot;</code></pre>
 </div>
 <div id="push-your-final-code-to-github" class="section level2">
 <h2>Push your final code to GitHub!</h2>

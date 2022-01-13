@@ -169,8 +169,7 @@ mean(mean_large_sleeptot)
 10. Which animal is the sleepiest among the entire dataframe?
 
 ```r
-max_sleeptot <- max(sleep$sleep_total)
-max_sleeptot
+max(sleep$sleep_total)
 ```
 
 ```
@@ -178,6 +177,14 @@ max_sleeptot
 ```
 I cannot figure this out!!!
 
+```r
+mammal_max_sleep <- sleep$name[(which.max(sleep$sleep_total))]
+mammal_max_sleep
+```
+
+```
+## [1] "Little brown bat"
+```
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.   

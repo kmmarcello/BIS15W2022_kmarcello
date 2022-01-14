@@ -94,6 +94,9 @@ I cannot figure this out!!!
 mammal_max_sleep <- sleep$name[(which.max(sleep$sleep_total))]
 mammal_max_sleep
 ```
+```{r}
+filter(mammals, sleep_total==19.9)
+```
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.   

@@ -56,7 +56,7 @@ tabyl(fish, lakeid)
 
 Similarly, if we are only interested in fish with a length greater than or equal to 350 we can use `filter()` to extract these observations.  
 ```{r}
-filter(fish, length >= 350)
+filter(fish, length >=350)
 ```
 
 + `filter()` allows all of the expected operators; i.e. >, >=, <, <=, != (not equal), and == (equal).  

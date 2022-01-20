@@ -6,6 +6,7 @@ output:
     theme: spacelab
     toc: yes
     toc_float: yes
+    keep_md: yes
 ---
 
 ## Breakout Rooms  
@@ -136,24 +137,30 @@ big_heros
 
 11. Just to be clear on the `|` operator,  have a look at the superheros over 300 in height...
 ```{r}
-filter(superhero_info, height >=300 | weight >= 450)
+tall_heros <- filter(superhero_info, height >=300)
+tall_heros
 ```
 
 12. ...and the superheros over 450 in weight. Bonus question! Why do we not have 16 rows in question #10?
 ```{r}
-
+big_and_tall <- filter(superhero_info, height >=300 | weight >= 450)
+big_and_tall
 ```
 
 ## Height to Weight Ratio
 13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
 ```{r}
-
+tabyl(superhero_info, height)
+```
+```{r}
+big_and_short <- filter(superhero_info, height <=100 | weight >= 450)
+big_and_short
 ```
 
 ## `superhero_powers`
 Have a quick look at the `superhero_powers` data frame.  
 ```{r}
-
+head(superhero_powers)
 ```
 
 14. How many superheros have a combination of accelerated healing, durability, and super strength?
@@ -169,7 +176,8 @@ Have a quick look at the `superhero_powers` data frame.
 
 16. Pick your favorite superhero and let's see their powers!
 ```{r}
-
+favorite_hero <- filter(superhero_powers, hero_names == "Abraxas")
+favorite_hero
 ```
 
 ## Push your final code to GitHub!

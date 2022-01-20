@@ -32,7 +32,7 @@ library("palmerpenguins")
 The summarize() and group_by() functions are powerful tools that we can use to produce clean summaries of data. Especially when used together, we can quickly group variables of interest and save time. Let's do some practice with the [palmerpenguins(https://allisonhorst.github.io/palmerpenguins/articles/intro.html) data to refresh our memory.
 
 ```r
-glimpse(penguins)
+glimpse(penguins) #look at info about the df
 ```
 
 ```
@@ -49,20 +49,27 @@ glimpse(penguins)
 ```
 
 ```r
-levels(penguins$island)
+levels(penguins$island) #what are the islands? regardless of count what will we find in here?
 ```
 
 ```
 ## [1] "Biscoe"    "Dream"     "Torgersen"
 ```
 
+```r
+levels(penguins$species) #same but with species, we are looking at a lot of data for only a few species
+```
+
+```
+## [1] "Adelie"    "Chinstrap" "Gentoo"
+```
 
 As biologists, a good question that we may ask is how do the measured variables differ by island (on average)?
 
 ```r
 penguins %>% 
-  group_by(island) %>% 
-  summarize(mean_body_mass_g=mean(body_mass_g),
+  group_by(island) %>% #only want to look at info when grouped by name of island
+  summarize(mean_body_mass_g=mean(body_mass_g), # mean of body mass on each island
             n=n())
 ```
 
@@ -76,12 +83,12 @@ penguins %>%
 ```
 
 Why do we have NA here? Do all of these penguins lack data?
-# here we are trying to see how many NAs there are in these data. keep track of MAs! then filter out NAs
+here we are trying to see how many NAs there are in these data. keep track of MAs! then filter out NAs
 
 ```r
-penguins %>% 
+penguins %>% # I only want to look at the info in this dataframe when these groups of islands are squished together
   group_by(island) %>% 
-  summarize(number_NAs=sum(is.na(body_mass_g)))
+  summarize(number_NAs=sum(is.na(body_mass_g))) #summarize how many(sum) NAs(is.na) are in the column body_mass_g for each island(group_by).
 ```
 
 ```
@@ -94,13 +101,13 @@ penguins %>%
 ```
 
 Well, that won't work so let's remove the NAs and recalculate.
-# here is where we filter out the NAs, nothing that is and NA in the column body_mass_g, then give me the mean of the data. 
+here is where we filter out the NAs, nothing that is and NA in the column body_mass_g, then give me the mean of the data. 
 
 ```r
 penguins %>% 
   filter(!is.na(body_mass_g)) %>% #removing NAs
-  group_by(island) %>% #looking at only islands, we used level to ge this
-  summarize(mean_body_mass_g=mean(body_mass_g),
+  group_by(island) %>% #looking at only islands, we used level to get this
+  summarize(mean_body_mass_g=mean(body_mass_g), # mean of each category when grouped by island but more than one category this time
             sd_body_mass_g=sd(body_mass_g),
             n=n())
 ```
@@ -118,8 +125,8 @@ What if we are interested in the number of observations (penguins) by species an
 
 ```r
 penguins %>% 
-  group_by(island, species) %>% 
-  summarize(n=n(), .groups= 'keep')#the .groups argument here just prevents a warning message
+  group_by(island, species) %>% #you can apparently group by more than 1 thing. torgerson only has adelie penguins on it, gentoo are only on Biscoe island
+  summarize(n=n(), .groups= 'keep') #the .groups argument here just prevents a warning message #n=n() n is the name of a new column. this is counting how many penguins are in each group
 ```
 
 ```
@@ -174,7 +181,7 @@ You can also use `count()` across multiple variables.
 
 ```r
 penguins %>% 
-  count(island, species, sort = F)
+  count(island, species, sort = F) #easier way to count
 ```
 
 ```
@@ -192,7 +199,7 @@ For counts, I am starting to prefer `tabyl()`. Lots of options are supported in 
 
 ```r
 penguins %>% 
-  tabyl(species, island)
+  tabyl(species, island) #another bomb ass way to count stuff
 ```
 
 ```
@@ -204,9 +211,9 @@ penguins %>%
 
 
 ```r
-penguins %>% 
+penguins %>% # this looks like a wa yto make the data more fancy and give a bit more info
   tabyl(species, island) %>% 
-  adorn_percentages() %>%
+  adorn_percentages() %>% 
   adorn_pct_formatting(digits = 1) %>%
   adorn_ns()
 ```
@@ -226,7 +233,10 @@ penguins %>%
 penguins %>%
   filter(species=="Adelie") %>% # from the dataset, penguins, just look at info for species(column) Adelie(value). filteR=rows
   select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %>%  # the only colums we are interested in are these here. seleCt=columns
-  summarize(mean_bill_length_mm=mean(bill_length_mm, na.rm=T), mean_bill_depth_mm=mean(bill_depth_mm, na.rm =T), mean_flipper_length_mm=mean(flipper_length_mm, na.rm =T), mean_body_mass_g=mean(body_mass_g, na.rm=T)) # summarize lets us use different statistics to get info out. here we are wanting the mean of some columns and wew are making whole new columns based on the answers
+  summarize(mean_bill_length_mm=mean(bill_length_mm, na.rm=T), 
+            mean_bill_depth_mm=mean(bill_depth_mm, na.rm =T), 
+            mean_flipper_length_mm=mean(flipper_length_mm, na.rm =T), 
+            mean_body_mass_g=mean(body_mass_g, na.rm=T)) # summarize lets us use different statistics to get info out. here we are wanting the mean of some columns and wew are making whole new columns based on the answers
 ```
 
 ```
@@ -235,21 +245,40 @@ penguins %>%
 ##                 <dbl>              <dbl>                  <dbl>            <dbl>
 ## 1                38.8               18.3                   190.            3701.
 ```
-
-
-```r
-#penguins %>% 
-  #filter(!is.na(bill_length_mm)) %>% 
-  #group_by(species, "Adelie") %>% 
-  #summarize(mean_bill_length_mm=mean(bill_length_mm), #mean_bill_length=mean(bill_length_mm), (mean_bill_depth=mean(bill_depth_mm),
-            #n=n())
-```
-
 2. How does the mean of `bill_length_mm` compare between penguin species?
 
+```r
+penguins %>% 
+  group_by(species) %>% 
+  summarize(n=n(), .groups= 'keep')
+```
+
+```
+## # A tibble: 3 × 2
+## # Groups:   species [3]
+##   species       n
+##   <fct>     <int>
+## 1 Adelie      152
+## 2 Chinstrap    68
+## 3 Gentoo      124
+```
 
 3. For some penguins, their sex is listed as NA. Where do these penguins occur?
 
+```r
+penguins %>% 
+  group_by(island) %>% 
+  summarize(number_NAs=sum(is.na(sex)))
+```
+
+```
+## # A tibble: 3 × 2
+##   island    number_NAs
+##   <fct>          <int>
+## 1 Biscoe             5
+## 2 Dream              1
+## 3 Torgersen          5
+```
 
 ## `across()`
 Last time we had some great questions on how to use `filter()` and `select()` across multiple variables. There is a new function in dplyr called `across()` which is designed to work across multiple variables. Have a look at Rebecca Barter's awesome blog [here](http://www.rebeccabarter.com/blog/2020-07-09-across/) as I am following her below.  
@@ -362,6 +391,35 @@ penguins %>%
 ## Practice
 1. Produce separate summaries of the mean and standard deviation for bill_length_mm, bill_depth_mm, and flipper_length_mm for each penguin species. Be sure to provide the number of samples.  
 
+```r
+penguins %>%
+  group_by(species) %>% 
+  summarize(across(contains("mm"), mean, na.rm=T), n=n())
+```
+
+```
+## # A tibble: 3 × 5
+##   species   bill_length_mm bill_depth_mm flipper_length_mm     n
+##   <fct>              <dbl>         <dbl>             <dbl> <int>
+## 1 Adelie              38.8          18.3              190.   152
+## 2 Chinstrap           48.8          18.4              196.    68
+## 3 Gentoo              47.5          15.0              217.   124
+```
+
+```r
+penguins %>%
+  group_by(species) %>% 
+  summarize(across(contains("mm"), sd, na.rm=T), n=n())
+```
+
+```
+## # A tibble: 3 × 5
+##   species   bill_length_mm bill_depth_mm flipper_length_mm     n
+##   <fct>              <dbl>         <dbl>             <dbl> <int>
+## 1 Adelie              2.66         1.22               6.54   152
+## 2 Chinstrap           3.34         1.14               7.13    68
+## 3 Gentoo              3.08         0.981              6.48   124
+```
 
 
 ## Wrap-up  

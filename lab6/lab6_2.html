@@ -266,7 +266,7 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 <div id="review" class="section level2">
 <h2>Review</h2>
 <p>The summarize() and group_by() functions are powerful tools that we can use to produce clean summaries of data. Especially when used together, we can quickly group variables of interest and save time. Let’s do some practice with the [palmerpenguins(<a href="https://allisonhorst.github.io/palmerpenguins/articles/intro.html" class="uri">https://allisonhorst.github.io/palmerpenguins/articles/intro.html</a>) data to refresh our memory.</p>
-<pre class="r"><code>glimpse(penguins)</code></pre>
+<pre class="r"><code>glimpse(penguins) #look at info about the df</code></pre>
 <pre><code>## Rows: 344
 ## Columns: 8
 ## $ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
@@ -277,12 +277,14 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 ## $ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
 ## $ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
 ## $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</code></pre>
-<pre class="r"><code>levels(penguins$island)</code></pre>
+<pre class="r"><code>levels(penguins$island) #what are the islands? regardless of count what will we find in here?</code></pre>
 <pre><code>## [1] &quot;Biscoe&quot;    &quot;Dream&quot;     &quot;Torgersen&quot;</code></pre>
+<pre class="r"><code>levels(penguins$species) #same but with species, we are looking at a lot of data for only a few species</code></pre>
+<pre><code>## [1] &quot;Adelie&quot;    &quot;Chinstrap&quot; &quot;Gentoo&quot;</code></pre>
 <p>As biologists, a good question that we may ask is how do the measured variables differ by island (on average)?</p>
 <pre class="r"><code>penguins %&gt;% 
-  group_by(island) %&gt;% 
-  summarize(mean_body_mass_g=mean(body_mass_g),
+  group_by(island) %&gt;% #only want to look at info when grouped by name of island
+  summarize(mean_body_mass_g=mean(body_mass_g), # mean of body mass on each island
             n=n())</code></pre>
 <pre><code>## # A tibble: 3 × 3
 ##   island    mean_body_mass_g     n
@@ -290,21 +292,21 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 ## 1 Biscoe                 NA    168
 ## 2 Dream                3713.   124
 ## 3 Torgersen              NA     52</code></pre>
-<p>Why do we have NA here? Do all of these penguins lack data? # here we are trying to see how many NAs there are in these data. keep track of MAs! then filter out NAs</p>
-<pre class="r"><code>penguins %&gt;% 
+<p>Why do we have NA here? Do all of these penguins lack data? here we are trying to see how many NAs there are in these data. keep track of MAs! then filter out NAs</p>
+<pre class="r"><code>penguins %&gt;% # I only want to look at the info in this dataframe when these groups of islands are squished together
   group_by(island) %&gt;% 
-  summarize(number_NAs=sum(is.na(body_mass_g)))</code></pre>
+  summarize(number_NAs=sum(is.na(body_mass_g))) #summarize how many(sum) NAs(is.na) are in the column body_mass_g for each island(group_by).</code></pre>
 <pre><code>## # A tibble: 3 × 2
 ##   island    number_NAs
 ##   &lt;fct&gt;          &lt;int&gt;
 ## 1 Biscoe             1
 ## 2 Dream              0
 ## 3 Torgersen          1</code></pre>
-<p>Well, that won’t work so let’s remove the NAs and recalculate. # here is where we filter out the NAs, nothing that is and NA in the column body_mass_g, then give me the mean of the data.</p>
+<p>Well, that won’t work so let’s remove the NAs and recalculate. here is where we filter out the NAs, nothing that is and NA in the column body_mass_g, then give me the mean of the data.</p>
 <pre class="r"><code>penguins %&gt;% 
   filter(!is.na(body_mass_g)) %&gt;% #removing NAs
-  group_by(island) %&gt;% #looking at only islands, we used level to ge this
-  summarize(mean_body_mass_g=mean(body_mass_g),
+  group_by(island) %&gt;% #looking at only islands, we used level to get this
+  summarize(mean_body_mass_g=mean(body_mass_g), # mean of each category when grouped by island but more than one category this time
             sd_body_mass_g=sd(body_mass_g),
             n=n())</code></pre>
 <pre><code>## # A tibble: 3 × 4
@@ -315,8 +317,8 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 ## 3 Torgersen            3706.           445.    51</code></pre>
 <p>What if we are interested in the number of observations (penguins) by species and island?</p>
 <pre class="r"><code>penguins %&gt;% 
-  group_by(island, species) %&gt;% 
-  summarize(n=n(), .groups= &#39;keep&#39;)#the .groups argument here just prevents a warning message</code></pre>
+  group_by(island, species) %&gt;% #you can apparently group by more than 1 thing. torgerson only has adelie penguins on it, gentoo are only on Biscoe island
+  summarize(n=n(), .groups= &#39;keep&#39;) #the .groups argument here just prevents a warning message #n=n() n is the name of a new column. this is counting how many penguins are in each group</code></pre>
 <pre><code>## # A tibble: 5 × 3
 ## # Groups:   island, species [5]
 ##   island    species       n
@@ -351,7 +353,7 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 ## 3 Torgersen    52</code></pre>
 <p>You can also use <code>count()</code> across multiple variables.</p>
 <pre class="r"><code>penguins %&gt;% 
-  count(island, species, sort = F)</code></pre>
+  count(island, species, sort = F) #easier way to count</code></pre>
 <pre><code>## # A tibble: 5 × 3
 ##   island    species       n
 ##   &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;
@@ -362,14 +364,14 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 ## 5 Torgersen Adelie       52</code></pre>
 <p>For counts, I am starting to prefer <code>tabyl()</code>. Lots of options are supported in <a href="https://cran.r-project.org/web/packages/janitor/vignettes/tabyls.html">tabyl</a></p>
 <pre class="r"><code>penguins %&gt;% 
-  tabyl(species, island)</code></pre>
+  tabyl(species, island) #another bomb ass way to count stuff</code></pre>
 <pre><code>##    species Biscoe Dream Torgersen
 ##     Adelie     44    56        52
 ##  Chinstrap      0    68         0
 ##     Gentoo    124     0         0</code></pre>
-<pre class="r"><code>penguins %&gt;% 
+<pre class="r"><code>penguins %&gt;% # this looks like a wa yto make the data more fancy and give a bit more info
   tabyl(species, island) %&gt;% 
-  adorn_percentages() %&gt;%
+  adorn_percentages() %&gt;% 
   adorn_pct_formatting(digits = 1) %&gt;%
   adorn_ns()</code></pre>
 <pre><code>##    species       Biscoe       Dream  Torgersen
@@ -385,20 +387,39 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 <pre class="r"><code>penguins %&gt;%
   filter(species==&quot;Adelie&quot;) %&gt;% # from the dataset, penguins, just look at info for species(column) Adelie(value). filteR=rows
   select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %&gt;%  # the only colums we are interested in are these here. seleCt=columns
-  summarize(mean_bill_length_mm=mean(bill_length_mm, na.rm=T), mean_bill_depth_mm=mean(bill_depth_mm, na.rm =T), mean_flipper_length_mm=mean(flipper_length_mm, na.rm =T), mean_body_mass_g=mean(body_mass_g, na.rm=T)) # summarize lets us use different statistics to get info out. here we are wanting the mean of some columns and wew are making whole new columns based on the answers</code></pre>
+  summarize(mean_bill_length_mm=mean(bill_length_mm, na.rm=T), 
+            mean_bill_depth_mm=mean(bill_depth_mm, na.rm =T), 
+            mean_flipper_length_mm=mean(flipper_length_mm, na.rm =T), 
+            mean_body_mass_g=mean(body_mass_g, na.rm=T)) # summarize lets us use different statistics to get info out. here we are wanting the mean of some columns and wew are making whole new columns based on the answers</code></pre>
 <pre><code>## # A tibble: 1 × 4
 ##   mean_bill_length_mm mean_bill_depth_mm mean_flipper_length_mm mean_body_mass_g
 ##                 &lt;dbl&gt;              &lt;dbl&gt;                  &lt;dbl&gt;            &lt;dbl&gt;
 ## 1                38.8               18.3                   190.            3701.</code></pre>
-<pre class="r"><code>#penguins %&gt;% 
-  #filter(!is.na(bill_length_mm)) %&gt;% 
-  #group_by(species, &quot;Adelie&quot;) %&gt;% 
-  #summarize(mean_bill_length_mm=mean(bill_length_mm), #mean_bill_length=mean(bill_length_mm), (mean_bill_depth=mean(bill_depth_mm),
-            #n=n())</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li><p>How does the mean of <code>bill_length_mm</code> compare between penguin species?</p></li>
-<li><p>For some penguins, their sex is listed as NA. Where do these penguins occur?</p></li>
+<li>How does the mean of <code>bill_length_mm</code> compare between penguin species?</li>
 </ol>
+<pre class="r"><code>penguins %&gt;% 
+  group_by(species) %&gt;% 
+  summarize(n=n(), .groups= &#39;keep&#39;)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+## # Groups:   species [3]
+##   species       n
+##   &lt;fct&gt;     &lt;int&gt;
+## 1 Adelie      152
+## 2 Chinstrap    68
+## 3 Gentoo      124</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>For some penguins, their sex is listed as NA. Where do these penguins occur?</li>
+</ol>
+<pre class="r"><code>penguins %&gt;% 
+  group_by(island) %&gt;% 
+  summarize(number_NAs=sum(is.na(sex)))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   island    number_NAs
+##   &lt;fct&gt;          &lt;int&gt;
+## 1 Biscoe             5
+## 2 Dream              1
+## 3 Torgersen          5</code></pre>
 </div>
 <div id="across" class="section level2">
 <h2><code>across()</code></h2>
@@ -465,6 +486,24 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 <ol style="list-style-type: decimal">
 <li>Produce separate summaries of the mean and standard deviation for bill_length_mm, bill_depth_mm, and flipper_length_mm for each penguin species. Be sure to provide the number of samples.</li>
 </ol>
+<pre class="r"><code>penguins %&gt;%
+  group_by(species) %&gt;% 
+  summarize(across(contains(&quot;mm&quot;), mean, na.rm=T), n=n())</code></pre>
+<pre><code>## # A tibble: 3 × 5
+##   species   bill_length_mm bill_depth_mm flipper_length_mm     n
+##   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt; &lt;int&gt;
+## 1 Adelie              38.8          18.3              190.   152
+## 2 Chinstrap           48.8          18.4              196.    68
+## 3 Gentoo              47.5          15.0              217.   124</code></pre>
+<pre class="r"><code>penguins %&gt;%
+  group_by(species) %&gt;% 
+  summarize(across(contains(&quot;mm&quot;), sd, na.rm=T), n=n())</code></pre>
+<pre><code>## # A tibble: 3 × 5
+##   species   bill_length_mm bill_depth_mm flipper_length_mm     n
+##   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt; &lt;int&gt;
+## 1 Adelie              2.66         1.22               6.54   152
+## 2 Chinstrap           3.34         1.14               7.13    68
+## 3 Gentoo              3.08         0.981              6.48   124</code></pre>
 </div>
 <div id="wrap-up" class="section level2">
 <h2>Wrap-up</h2>

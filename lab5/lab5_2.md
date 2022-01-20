@@ -664,24 +664,29 @@ head(superhero_powers)
 
 
 16. Pick your favorite superhero and let's see their powers!
+# from questions asked about this in class. filter your super hero name, pipe, select all the columns(variables) that equal TRUE. This will give you only the powers the superhero has.
 
 ```r
-favorite_hero <- filter(superhero_powers, hero_names == "Abraxas")
-favorite_hero
+superhero_powers %>% 
+  filter(hero_names == "Abraxas") %>% 
+  select_if(all_vars(.=='TRUE'))
 ```
 
 ```
-## # A tibble: 1 × 168
-##   hero_names agility accelerated_healing lantern_power_ring dimensional_awarene…
-##   <chr>      <lgl>   <lgl>               <lgl>              <lgl>               
-## 1 Abraxas    FALSE   FALSE               FALSE              TRUE                
-## # … with 163 more variables: cold_resistance <lgl>, durability <lgl>,
-## #   stealth <lgl>, energy_absorption <lgl>, flight <lgl>, danger_sense <lgl>,
-## #   underwater_breathing <lgl>, marksmanship <lgl>, weapons_master <lgl>,
-## #   power_augmentation <lgl>, animal_attributes <lgl>, longevity <lgl>,
-## #   intelligence <lgl>, super_strength <lgl>, cryokinesis <lgl>,
-## #   telepathy <lgl>, energy_armor <lgl>, energy_blasts <lgl>,
-## #   duplication <lgl>, size_changing <lgl>, density_control <lgl>, …
+## Warning: The `.predicate` argument of `select_if()` can't contain quosures. as of dplyr 0.8.3.
+## Please use a one-sided formula, a function, or a function name.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
+```
+
+```
+## # A tibble: 1 × 14
+##   dimensional_awar… flight intelligence super_strength size_changing super_speed
+##   <lgl>             <lgl>  <lgl>        <lgl>          <lgl>         <lgl>      
+## 1 TRUE              TRUE   TRUE         TRUE           TRUE          TRUE       
+## # … with 8 more variables: teleportation <lgl>, magic <lgl>,
+## #   dimensional_travel <lgl>, immortality <lgl>, invulnerability <lgl>,
+## #   molecular_manipulation <lgl>, energy_manipulation <lgl>, power_cosmic <lgl>
 ```
 
 ## Push your final code to GitHub!

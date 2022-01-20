@@ -175,9 +175,11 @@ head(superhero_powers)
 ```
 
 16. Pick your favorite superhero and let's see their powers!
+# from questions asked about this in class. filter your super hero name, pipe, select all the columns(variables) that equal TRUE. This will give you only the powers the superhero has.
 ```{r}
-favorite_hero <- filter(superhero_powers, hero_names == "Abraxas")
-favorite_hero
+superhero_powers %>% 
+  filter(hero_names == "Abraxas") %>% 
+  select_if(all_vars(.=='TRUE'))
 ```
 
 ## Push your final code to GitHub!

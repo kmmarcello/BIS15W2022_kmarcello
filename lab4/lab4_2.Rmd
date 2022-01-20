@@ -2,10 +2,11 @@
 title: "Transforming data 2: `filter()`"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
     toc: yes
     toc_float: yes
+    keep_md: yes
   pdf_document:
     toc: yes
 ---
@@ -30,7 +31,6 @@ fish <- readr::read_csv("data/Gaeta_etal_CLC_data.csv")
 mammals <- readr::read_csv("data/mammal_lifehistories_v2.csv")
 ```
 ```{r}
-install.packages("janitor")
 library("janitor")
 ```
 

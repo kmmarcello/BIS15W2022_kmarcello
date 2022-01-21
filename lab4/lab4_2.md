@@ -1,6 +1,6 @@
 ---
 title: "Transforming data 2: `filter()`"
-date: "2022-01-18"
+date: "2022-01-20"
 output:
   html_document: 
     theme: spacelab
@@ -104,6 +104,14 @@ names(mammals)
 
 ```r
 mammals <- clean_names(mammals)
+names(mammals)
+```
+
+```
+##  [1] "order"            "family"           "genus"            "species"         
+##  [5] "mass"             "gestation"        "newborn"          "weaning"         
+##  [9] "wean_mass"        "afr"              "max_life"         "litter_size"     
+## [13] "litters_per_year"
 ```
 
 ## `filter()`get things out of rows!!! select() get things out of columns!!!!
@@ -157,24 +165,24 @@ tabyl(fish, lakeid)
 Similarly, if we are only interested in fish with a length greater than or equal to 350 we can use `filter()` to extract these observations.  
 
 ```r
-filter(fish, length >=350)
+filter(fish, radii_length_mm >= 2.9)
 ```
 
 ```
-## # A tibble: 890 × 6
+## # A tibble: 2,560 × 6
 ##    lakeid fish_id annnumber length radii_length_mm scalelength
 ##    <chr>    <dbl> <chr>      <dbl>           <dbl>       <dbl>
-##  1 AL         306 EDGE         350            6.94        6.94
-##  2 AL         306 10           350            6.46        6.94
-##  3 AL         306 9            350            6.16        6.94
-##  4 AL         306 8            350            5.88        6.94
-##  5 AL         306 7            350            5.42        6.94
-##  6 AL         306 6            350            4.90        6.94
-##  7 AL         306 5            350            4.46        6.94
-##  8 AL         306 4            350            3.75        6.94
-##  9 AL         306 3            350            2.93        6.94
-## 10 AL         306 2            350            2.14        6.94
-## # … with 880 more rows
+##  1 AL         300 EDGE         175            3.02        3.02
+##  2 AL         301 EDGE         194            3.34        3.34
+##  3 AL         301 3            194            2.97        3.34
+##  4 AL         302 EDGE         324            6.07        6.07
+##  5 AL         302 9            324            5.73        6.07
+##  6 AL         302 8            324            5.41        6.07
+##  7 AL         302 7            324            5.01        6.07
+##  8 AL         302 6            324            4.56        6.07
+##  9 AL         302 5            324            4.20        6.07
+## 10 AL         302 4            324            3.72        6.07
+## # … with 2,550 more rows
 ```
 
 + `filter()` allows all of the expected operators; i.e. >, >=, <, <=, != (not equal), and == (equal).  
@@ -281,15 +289,95 @@ filter(fish, near(radii_length_mm, 2, tol = 0.2))
 ## Practice
 1. Filter the `fish` data to include the samples from lake "BO".
 
+```r
+filter(fish, lakeid == "BO")
+```
+
+```
+## # A tibble: 197 × 6
+##    lakeid fish_id annnumber length radii_length_mm scalelength
+##    <chr>    <dbl> <chr>      <dbl>           <dbl>       <dbl>
+##  1 BO         389 EDGE         104           1.50         1.50
+##  2 BO         389 1            104           0.736        1.50
+##  3 BO         390 EDGE         105           1.59         1.59
+##  4 BO         390 1            105           0.698        1.59
+##  5 BO         391 EDGE         107           1.43         1.43
+##  6 BO         391 1            107           0.695        1.43
+##  7 BO         392 EDGE         124           2.11         2.11
+##  8 BO         392 2            124           1.36         2.11
+##  9 BO         392 1            124           0.792        2.11
+## 10 BO         393 EDGE         141           2.16         2.16
+## # … with 187 more rows
+```
 
 2. Filter the data to include all lakes except "AR".
 
+```r
+filter(fish, lakeid != "AR")
+```
+
+```
+## # A tibble: 3,771 × 6
+##    lakeid fish_id annnumber length radii_length_mm scalelength
+##    <chr>    <dbl> <chr>      <dbl>           <dbl>       <dbl>
+##  1 AL         299 EDGE         167            2.70        2.70
+##  2 AL         299 2            167            2.04        2.70
+##  3 AL         299 1            167            1.31        2.70
+##  4 AL         300 EDGE         175            3.02        3.02
+##  5 AL         300 3            175            2.67        3.02
+##  6 AL         300 2            175            2.14        3.02
+##  7 AL         300 1            175            1.23        3.02
+##  8 AL         301 EDGE         194            3.34        3.34
+##  9 AL         301 3            194            2.97        3.34
+## 10 AL         301 2            194            2.29        3.34
+## # … with 3,761 more rows
+```
 
 3. Filter the fish data to include all fish with a scalelength within 0.25 of 8.
 
+```r
+filter(fish, near(scalelength, 8, tol=0.25))
+```
+
+```
+## # A tibble: 236 × 6
+##    lakeid fish_id annnumber length radii_length_mm scalelength
+##    <chr>    <dbl> <chr>      <dbl>           <dbl>       <dbl>
+##  1 AL         309 EDGE         355            7.89        7.89
+##  2 AL         309 13           355            7.56        7.89
+##  3 AL         309 12           355            7.36        7.89
+##  4 AL         309 11           355            7.16        7.89
+##  5 AL         309 10           355            6.77        7.89
+##  6 AL         309 9            355            6.39        7.89
+##  7 AL         309 8            355            5.96        7.89
+##  8 AL         309 7            355            5.44        7.89
+##  9 AL         309 6            355            4.74        7.89
+## 10 AL         309 5            355            4.06        7.89
+## # … with 226 more rows
+```
 
 4. Filter the fish data to include fish with a scalelength between 2 and 4.
 
+```r
+filter(fish, between(scalelength, 2, 4))
+```
+
+```
+## # A tibble: 723 × 6
+##    lakeid fish_id annnumber length radii_length_mm scalelength
+##    <chr>    <dbl> <chr>      <dbl>           <dbl>       <dbl>
+##  1 AL         299 EDGE         167            2.70        2.70
+##  2 AL         299 2            167            2.04        2.70
+##  3 AL         299 1            167            1.31        2.70
+##  4 AL         300 EDGE         175            3.02        3.02
+##  5 AL         300 3            175            2.67        3.02
+##  6 AL         300 2            175            2.14        3.02
+##  7 AL         300 1            175            1.23        3.02
+##  8 AL         301 EDGE         194            3.34        3.34
+##  9 AL         301 3            194            2.97        3.34
+## 10 AL         301 2            194            2.29        3.34
+## # … with 713 more rows
+```
 
 ## Using `filter()` on multiple conditions
 You can also use `filter()` to extract data based on multiple conditions. Below we extract only the fish that have lakeid "AL" and length >350.
@@ -338,11 +426,32 @@ filter(fish, lakeid == "AL" | length > 350)
 ## # … with 938 more rows
 ```
 
+```r
+filter(fish, xor(lakeid == "AL", length >=200))
+```
+
+```
+## # A tibble: 3,219 × 6
+##    lakeid fish_id annnumber length radii_length_mm scalelength
+##    <chr>    <dbl> <chr>      <dbl>           <dbl>       <dbl>
+##  1 AL         299 EDGE         167            2.70        2.70
+##  2 AL         299 2            167            2.04        2.70
+##  3 AL         299 1            167            1.31        2.70
+##  4 AL         300 EDGE         175            3.02        3.02
+##  5 AL         300 3            175            2.67        3.02
+##  6 AL         300 2            175            2.14        3.02
+##  7 AL         300 1            175            1.23        3.02
+##  8 AL         301 EDGE         194            3.34        3.34
+##  9 AL         301 3            194            2.97        3.34
+## 10 AL         301 2            194            2.29        3.34
+## # … with 3,209 more rows
+```
+
 Rules:  
-+ `filter(condition1, condition2)` will return rows where both conditions are met.  
-+ `filter(condition1, !condition2)` will return all rows where condition one is true but condition 2 is not.  
-+ `filter(condition1 | condition2)` will return rows where condition 1 and/or condition 2 is met.  
-+ `filter(xor(condition1, condition2)` will return all rows where only one of the conditions is met, and not when both conditions are met.  
++ `filter(df, condition1, condition2)` will return rows where both conditions are met.  
++ `filter(df, condition1, !condition2)` will return all rows where condition one is true but condition 2 is not.  
++ `filter(df, condition1 | condition2)` will return rows where condition 1 and/or condition 2 is met.  
++ `filter(df, xor(condition1, condition2))` will return all rows where only one of the conditions is met, and not when both conditions are met.  
 
 In this case, we filter out the fish with a length over 400 and a scale length over 11 or a radii length over 8.
 
@@ -370,21 +479,158 @@ filter(fish, length > 400, (scalelength > 11 | radii_length_mm > 8))
 ## Practice  
 1. Have a look at the mammals data using the summary functions of your choosing.    
 
+```r
+summary(mammals)
+```
+
+```
+##     order              family             genus             species         
+##  Length:1440        Length:1440        Length:1440        Length:1440       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##       mass             gestation          newborn             weaning       
+##  Min.   :     -999   Min.   :-999.00   Min.   :   -999.0   Min.   :-999.00  
+##  1st Qu.:       50   1st Qu.:-999.00   1st Qu.:   -999.0   1st Qu.:-999.00  
+##  Median :      403   Median :   1.05   Median :      2.6   Median :   0.73  
+##  Mean   :   383577   Mean   :-287.25   Mean   :   6703.1   Mean   :-427.17  
+##  3rd Qu.:     7009   3rd Qu.:   4.50   3rd Qu.:     98.0   3rd Qu.:   2.00  
+##  Max.   :149000000   Max.   :  21.46   Max.   :2250000.0   Max.   :  48.00  
+##    wean_mass             afr             max_life       litter_size      
+##  Min.   :    -999   Min.   :-999.00   Min.   :-999.0   Min.   :-999.000  
+##  1st Qu.:    -999   1st Qu.:-999.00   1st Qu.:-999.0   1st Qu.:   1.000  
+##  Median :    -999   Median :   2.50   Median :-999.0   Median :   2.270  
+##  Mean   :   16049   Mean   :-408.12   Mean   :-490.3   Mean   : -55.634  
+##  3rd Qu.:      10   3rd Qu.:  15.61   3rd Qu.: 147.2   3rd Qu.:   3.835  
+##  Max.   :19075000   Max.   : 210.00   Max.   :1368.0   Max.   :  14.180  
+##  litters_per_year  
+##  Min.   :-999.000  
+##  1st Qu.:-999.000  
+##  Median :   0.375  
+##  Mean   :-477.141  
+##  3rd Qu.:   1.155  
+##  Max.   :   7.500
+```
 
 2. What are the names of the variables in the mammals data?  
 
+```r
+names(mammals)
+```
+
+```
+##  [1] "order"            "family"           "genus"            "species"         
+##  [5] "mass"             "gestation"        "newborn"          "weaning"         
+##  [9] "wean_mass"        "afr"              "max_life"         "litter_size"     
+## [13] "litters_per_year"
+```
 
 3.  From the `mammals` data, filter all members of the family Bovidae with a mass greater than 450000.
 
+```r
+filter(mammals, family =="Bovidae" & mass > 450000)
+```
+
+```
+## # A tibble: 7 × 13
+##   order   family genus  species   mass gestation newborn weaning wean_mass   afr
+##   <chr>   <chr>  <chr>  <chr>    <dbl>     <dbl>   <dbl>   <dbl>     <dbl> <dbl>
+## 1 Artiod… Bovid… Bison  bison   4.98e5      8.93  20000    10.7     157500  29.4
+## 2 Artiod… Bovid… Bison  bonasus 5   e5      9.14  23000.    6.6       -999  30.0
+## 3 Artiod… Bovid… Bos    fronta… 8   e5      9.02  23033.    4.5       -999  24.2
+## 4 Artiod… Bovid… Bos    javani… 6.67e5      9.83   -999     9.5       -999  25.5
+## 5 Artiod… Bovid… Bubal… bubalis 9.5 e5     10.5   37500     7.5       -999  19.9
+## 6 Artiod… Bovid… Synce… caffer  5.05e5     11.0   42862.    9.18    166000  47.9
+## 7 Artiod… Bovid… Tauro… derbia… 6.8 e5      8.67   -999  -999         -999  36.4
+## # … with 3 more variables: max_life <dbl>, litter_size <dbl>,
+## #   litters_per_year <dbl>
+```
 
 4. Let's say we are only interested in family, genus, species, mass, and gestation. Relimit the mammals data frame to these variables.  
 
+```r
+mammals <- select(mammals, family, genus, species, mass, gestation, newborn)
+mammals
+```
+
+```
+## # A tibble: 1,440 × 6
+##    family         genus       species          mass gestation newborn
+##    <chr>          <chr>       <chr>           <dbl>     <dbl>   <dbl>
+##  1 Antilocapridae Antilocapra americana      45375       8.13   3246.
+##  2 Bovidae        Addax       nasomaculatus 182375       9.39   5480 
+##  3 Bovidae        Aepyceros   melampus       41480       6.35   5093 
+##  4 Bovidae        Alcelaphus  buselaphus    150000       7.9   10167.
+##  5 Bovidae        Ammodorcas  clarkei        28500       6.8    -999 
+##  6 Bovidae        Ammotragus  lervia         55500       5.08   3810 
+##  7 Bovidae        Antidorcas  marsupialis    30000       5.72   3910 
+##  8 Bovidae        Antilope    cervicapra     37500       5.5    3846 
+##  9 Bovidae        Bison       bison         497667.      8.93  20000 
+## 10 Bovidae        Bison       bonasus       500000       9.14  23000.
+## # … with 1,430 more rows
+```
 
 5. Use the output from #4 to focus on the family Bovidae with a mass greater than 450000.
 
+```r
+filter(mammals, family == "Bovidae" & mass >= 450000)
+```
+
+```
+## # A tibble: 7 × 6
+##   family  genus       species      mass gestation newborn
+##   <chr>   <chr>       <chr>       <dbl>     <dbl>   <dbl>
+## 1 Bovidae Bison       bison     497667.      8.93  20000 
+## 2 Bovidae Bison       bonasus   500000       9.14  23000.
+## 3 Bovidae Bos         frontalis 800000       9.02  23033.
+## 4 Bovidae Bos         javanicus 666667.      9.83   -999 
+## 5 Bovidae Bubalus     bubalis   950000      10.5   37500 
+## 6 Bovidae Syncerus    caffer    504667.     11.0   42862.
+## 7 Bovidae Taurotragus derbianus 680000       8.67   -999
+```
 
 6. From the `mammals` data, build a data frame that compares `mass`, `gestation`, and `newborn` among the primate genera `Lophocebus`, `Erythrocebus`, and `Macaca`. Among these genera, which species has the smallest `newborn` mass?
 
+```r
+newerer_mammals <- select(mammals, mass, gestation, newborn,genus)
+```
+
+```r
+names(mammals)
+```
+
+```
+## [1] "family"    "genus"     "species"   "mass"      "gestation" "newborn"
+```
+
+
+```r
+#filter(newerer_mammals, genus == "Lophocebus" | genus == "Erythrocebus" | genus == "Macaca")
+filter(newerer_mammals, genus %in% c("Lophocebus", "Erythrocebus", "Macaca"))
+```
+
+```
+## # A tibble: 15 × 4
+##      mass gestation newborn genus       
+##     <dbl>     <dbl>   <dbl> <chr>       
+##  1  5883.      5.56    546. Erythrocebus
+##  2  6726.      5.97    462. Lophocebus  
+##  3 10037.      5.67    533. Macaca      
+##  4  8858.      5.72    505. Macaca      
+##  5  5575       5.43    390. Macaca      
+##  6  9753.      5.49    450  Macaca      
+##  7  7308.      6       486. Macaca      
+##  8  6212.      5.78    458. Macaca      
+##  9  3495    -999       446  Macaca      
+## 10  4875       5.94    418  Macaca      
+## 11  5413.      5.47    476. Macaca      
+## 12  6317.      5.4     401  Macaca      
+## 13  6133.      5.71    476. Macaca      
+## 14  3456.      5.49    408. Macaca      
+## 15  3735       5.43    391. Macaca
+```
 
 
 

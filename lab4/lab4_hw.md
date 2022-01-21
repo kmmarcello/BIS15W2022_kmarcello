@@ -304,8 +304,61 @@ deer
 ## 12       7500.       3.88 cervidae pudu       puda
 ```
 
+```r
+names(homerange)
+```
+
+```
+##  [1] "taxon"                      "common.name"               
+##  [3] "class"                      "order"                     
+##  [5] "family"                     "genus"                     
+##  [7] "species"                    "primarymethod"             
+##  [9] "N"                          "mean.mass.g"               
+## [11] "log10.mass"                 "alternative.mass.reference"
+## [13] "mean.hra.m2"                "log10.hra"                 
+## [15] "hra.reference"              "realm"                     
+## [17] "thermoregulation"           "locomotion"                
+## [19] "trophic.guild"              "dimension"                 
+## [21] "preymass"                   "log10.preymass"            
+## [23] "PPMR"                       "prey.size.reference"
+```
+
+```r
+head(homerange$taxon)
+```
+
+```
+## [1] lake fishes  river fishes river fishes river fishes river fishes
+## [6] river fishes
+## 9 Levels: birds lake fishes lizards mammals marine fishes ... turtles
+```
+
 
 **10. As measured by the data, which snake species has the smallest homerange? Show all of your work, please. Look this species up online and tell me about it!** **Snake is found in taxon column**    
+
+```r
+homerange %>%
+  select(taxon, log10.hra) %>% 
+  filter(taxon == "snakes") %>% 
+  arrange(log10.hra)
+```
+
+```
+## # A tibble: 41 × 2
+##    taxon  log10.hra
+##    <fct>      <dbl>
+##  1 snakes      2.30
+##  2 snakes      2.40
+##  3 snakes      2.78
+##  4 snakes      2.85
+##  5 snakes      3.38
+##  6 snakes      3.42
+##  7 snakes      3.81
+##  8 snakes      4.03
+##  9 snakes      4.19
+## 10 snakes      4.24
+## # … with 31 more rows
+```
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.   

@@ -55,15 +55,33 @@ remotes::install_github("allisonhorst/palmerpenguins")
 ```{r}
 names(msleep)
 ```
+```{r}
+msleep24 <- msleep
+msleep24 %>% 
+  mutate(sleep_total_24 = sleep_total/24) %>% 
+  select("name", "vore", "sleep_total_24") %>% 
+  
+  
+```
+
 
 Did `dplyr` do what we expected? How do we check our output? Remember, just because your code runs it doesn't mean that it did what you intended.
 ```{r}
-#summary(msleep24)
+str(msleep)
+```
+```{r}
+glimpse(msleep)
+```
+```{r}
+dim(msleep)
+```
+```{r}
+summary(msleep)
 ```
 
 Try out the new function `skim()` as part of the `skimr` package.
 ```{r}
-#skim(msleep24)
+skim(msleep24)
 ```
 
 Histograms are also a quick way to check the output.

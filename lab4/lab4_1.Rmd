@@ -38,6 +38,10 @@ Once data have been uploaded, let's get an idea of its structure, contents, and 
 glimpse(fish)
 ```
 ```{r}
+head(fish, 10)
+```
+
+```{r}
 str(fish)
 ```
 ```{r}
@@ -61,20 +65,23 @@ names(fish)
 ```
 
 We are only interested in lakeid and scalelength.
+you don't need quotes on the column names here. think of them as an object of the object which is the dataframe.
 ```{r}
-select(fish, "lakeid", "scalelength")
+select(fish, lakeid, scalelength)
 ```
 
 To add a range of columns use `start_col:end_col`.
 ```{r}
 fish
 ```
-
+no quotes here either
 ```{r}
+#select(fish, 1:4)
 select(fish, fish_id:length)
 ```
 
 The - operator is useful in select. It allows us to select everything except the specified variables.
+you only write minus or not minus. you never do both. no quotes.
 ```{r}
 select(fish, -fish_id, -annnumber, -length, -radii_length_mm)
 ```
@@ -149,11 +156,13 @@ glimpse(mammals)
 2. Are there any NAs? Are you sure? Try taking an average of `max. life` as a test.  
 ```{r}
 anyNA(mammals)
+
 ```
 
 ```{r}
-x <- mammals[ 11]
+x <- mammals[11]
 colMeans(x)
+#x
 ```
 
 ```{r}
@@ -173,12 +182,12 @@ mammals_new
 
 5. We are only interested in the variables `genus`, `species`, and `mass`. Use `select()` to build a new dataframe `mass` focused on these variables.
 ```{r}
-mass <- select(mammals_new, "genus", "species", "mass")
+mass <- select(mammals_new, genus, species, mass)
 mass
 ```
 
 ```{r}
-select(mammals_new, "species", "genus", "mass")
+select(mammals_new, species, genus, mass)
 ```
 
 6. What if we only wanted to exclude `order` and `family`? Use the `-` operator to make the code efficient.
@@ -186,14 +195,15 @@ select(mammals_new, "species", "genus", "mass")
 select(mammals_new, -order, -family)
 ```
 
-7. Select the columns that include "mass" as part of the name.  
+7. Select the columns that include "mass" as part of the name. need quotes here!! you are looking at part of the column(object) name 
 ```{r}
 select(mammals_new, contains("mass"))
 ```
 
-8. Select all of the columns that are of class `character`.  
+8. Select all of the columns that are of class `character`.  what is the difference between these two?
 ```{r}
 select_if(mammals_new, ~is.character(.))
+#select_if(mammals_new, is.character)
 ```
 
 ## Other

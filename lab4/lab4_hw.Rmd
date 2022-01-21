@@ -102,9 +102,22 @@ deer <- homerange %>%
   arrange(desc(log10.mass))
 deer
 ```
+```{r}
+names(homerange)
+```
+```{r}
+head(homerange$taxon)
+```
 
 
 **10. As measured by the data, which snake species has the smallest homerange? Show all of your work, please. Look this species up online and tell me about it!** **Snake is found in taxon column**    
+```{r}
+homerange %>%
+  select(taxon, genus, species, log10.hra) %>% 
+  filter(taxon == "snakes") %>% 
+  arrange(log10.hra)
+  
+```
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.   

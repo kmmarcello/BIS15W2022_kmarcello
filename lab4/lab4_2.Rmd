@@ -43,6 +43,7 @@ names(mammals)
 ```
 ```{r}
 mammals <- clean_names(mammals)
+names(mammals)
 ```
 
 ## `filter()`get things out of rows!!! select() get things out of columns!!!!
@@ -56,7 +57,7 @@ tabyl(fish, lakeid)
 
 Similarly, if we are only interested in fish with a length greater than or equal to 350 we can use `filter()` to extract these observations.  
 ```{r}
-filter(fish, length >=350)
+filter(fish, radii_length_mm >= 2.9)
 ```
 
 + `filter()` allows all of the expected operators; i.e. >, >=, <, <=, != (not equal), and == (equal).  
@@ -85,22 +86,22 @@ filter(fish, near(radii_length_mm, 2, tol = 0.2))
 ## Practice
 1. Filter the `fish` data to include the samples from lake "BO".
 ```{r}
-
+filter(fish, lakeid == "BO")
 ```
 
 2. Filter the data to include all lakes except "AR".
 ```{r}
-
+filter(fish, lakeid != "AR")
 ```
 
 3. Filter the fish data to include all fish with a scalelength within 0.25 of 8.
 ```{r}
-
+filter(fish, near(scalelength, 8, tol=0.25))
 ```
 
 4. Filter the fish data to include fish with a scalelength between 2 and 4.
 ```{r}
-
+filter(fish, between(scalelength, 2, 4))
 ```
 
 ## Using `filter()` on multiple conditions
@@ -113,12 +114,15 @@ Notice that the `|` operator generates a different result.
 ```{r}
 filter(fish, lakeid == "AL" | length > 350)
 ```
+```{r}
+filter(fish, xor(lakeid == "AL", length >=200))
+```
 
 Rules:  
-+ `filter(condition1, condition2)` will return rows where both conditions are met.  
-+ `filter(condition1, !condition2)` will return all rows where condition one is true but condition 2 is not.  
-+ `filter(condition1 | condition2)` will return rows where condition 1 and/or condition 2 is met.  
-+ `filter(xor(condition1, condition2)` will return all rows where only one of the conditions is met, and not when both conditions are met.  
++ `filter(df, condition1, condition2)` will return rows where both conditions are met.  
++ `filter(df, condition1, !condition2)` will return all rows where condition one is true but condition 2 is not.  
++ `filter(df, condition1 | condition2)` will return rows where condition 1 and/or condition 2 is met.  
++ `filter(df, xor(condition1, condition2))` will return all rows where only one of the conditions is met, and not when both conditions are met.  
 
 In this case, we filter out the fish with a length over 400 and a scale length over 11 or a radii length over 8.
 ```{r}
@@ -128,37 +132,44 @@ filter(fish, length > 400, (scalelength > 11 | radii_length_mm > 8))
 ## Practice  
 1. Have a look at the mammals data using the summary functions of your choosing.    
 ```{r}
-
+summary(mammals)
 ```
 
 2. What are the names of the variables in the mammals data?  
 ```{r}
-
+names(mammals)
 ```
 
 3.  From the `mammals` data, filter all members of the family Bovidae with a mass greater than 450000.
 ```{r}
-
+filter(mammals, family =="Bovidae" & mass > 450000)
 ```
 
 4. Let's say we are only interested in family, genus, species, mass, and gestation. Relimit the mammals data frame to these variables.  
 ```{r}
-
+mammals <- select(mammals, family, genus, species, mass, gestation, newborn)
+mammals
 ```
 
 5. Use the output from #4 to focus on the family Bovidae with a mass greater than 450000.
 ```{r}
-
+filter(mammals, family == "Bovidae" & mass >= 450000)
 ```
 
 6. From the `mammals` data, build a data frame that compares `mass`, `gestation`, and `newborn` among the primate genera `Lophocebus`, `Erythrocebus`, and `Macaca`. Among these genera, which species has the smallest `newborn` mass?
 ```{r}
-
+newerer_mammals <- select(mammals, mass, gestation, newborn,genus)
+```
+```{r}
+names(mammals)
 ```
 
 ```{r}
-
+#filter(newerer_mammals, genus == "Lophocebus" | genus == "Erythrocebus" | genus == "Macaca")
+filter(newerer_mammals, genus %in% c("Lophocebus", "Erythrocebus", "Macaca"))
 ```
+
+
 
 ## Wrap-up  
 

@@ -358,7 +358,42 @@ deer</code></pre>
 ## 10      24050.       4.38 cervidae capreolus  capreolus  
 ## 11      13500.       4.13 cervidae muntiacus  reevesi    
 ## 12       7500.       3.88 cervidae pudu       puda</code></pre>
+<pre class="r"><code>names(homerange)</code></pre>
+<pre><code>##  [1] &quot;taxon&quot;                      &quot;common.name&quot;               
+##  [3] &quot;class&quot;                      &quot;order&quot;                     
+##  [5] &quot;family&quot;                     &quot;genus&quot;                     
+##  [7] &quot;species&quot;                    &quot;primarymethod&quot;             
+##  [9] &quot;N&quot;                          &quot;mean.mass.g&quot;               
+## [11] &quot;log10.mass&quot;                 &quot;alternative.mass.reference&quot;
+## [13] &quot;mean.hra.m2&quot;                &quot;log10.hra&quot;                 
+## [15] &quot;hra.reference&quot;              &quot;realm&quot;                     
+## [17] &quot;thermoregulation&quot;           &quot;locomotion&quot;                
+## [19] &quot;trophic.guild&quot;              &quot;dimension&quot;                 
+## [21] &quot;preymass&quot;                   &quot;log10.preymass&quot;            
+## [23] &quot;PPMR&quot;                       &quot;prey.size.reference&quot;</code></pre>
+<pre class="r"><code>head(homerange$taxon)</code></pre>
+<pre><code>## [1] lake fishes  river fishes river fishes river fishes river fishes
+## [6] river fishes
+## 9 Levels: birds lake fishes lizards mammals marine fishes ... turtles</code></pre>
 <p><strong>10. As measured by the data, which snake species has the smallest homerange? Show all of your work, please. Look this species up online and tell me about it!</strong> <strong>Snake is found in taxon column</strong></p>
+<pre class="r"><code>homerange %&gt;%
+  select(taxon, log10.hra) %&gt;% 
+  filter(taxon == &quot;snakes&quot;) %&gt;% 
+  arrange(log10.hra)</code></pre>
+<pre><code>## # A tibble: 41 × 2
+##    taxon  log10.hra
+##    &lt;fct&gt;      &lt;dbl&gt;
+##  1 snakes      2.30
+##  2 snakes      2.40
+##  3 snakes      2.78
+##  4 snakes      2.85
+##  5 snakes      3.38
+##  6 snakes      3.42
+##  7 snakes      3.81
+##  8 snakes      4.03
+##  9 snakes      4.19
+## 10 snakes      4.24
+## # … with 31 more rows</code></pre>
 </div>
 <div id="push-your-final-code-to-github" class="section level2">
 <h2>Push your final code to GitHub!</h2>

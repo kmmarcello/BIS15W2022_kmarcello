@@ -67,7 +67,7 @@ select(fish, lakeid, scalelength)
 ```{r}
 fish %>%
   select(lakeid, scalelength) %>%
-  filter(lakeid == "AL")
+  filter(lakeid == "BO")
 ```
 
 Here we select family, genus, and species then filter for gestation greater than 15 months.
@@ -92,7 +92,7 @@ The `arrange()` command is a bit like a sort command in excel. Note that the def
 ```{r}
 fish %>% 
   select(lakeid, scalelength) %>% 
-  arrange(scalelength)
+  arrange(desc(lakeid))
 ```
 
 To sort in decreasing order, wrap the variable name in `desc()`.
@@ -114,8 +114,8 @@ fish %>%
 1. We are interested in the radii length and scalelength of fish with the id `300`. Extract this information from the `fish` data. Please sort the data by radii length.
 ```{r}
 fish %>% 
-  select(fish_id, radii_length_mm, scalelength) %>% 
-  filter(fish_id==300) %>% 
+  filter(fish_id==300) %>% #filtered all of the fish IDs first, then selected the columns we needed
+  select(radii_length_mm, scalelength) %>% 
   arrange(radii_length_mm)
 ```
 
@@ -168,9 +168,9 @@ fish %>%
 2. We are interested in the family, genus, species and max life variables. Because the max life span for several mammals is unknown, the authors have use -999 in place of NA. Replace all of these values with NA in a new column titled `max_life_new`. Finally, sort the date in descending order by max_life_new. Which mammal has the oldest known life span?
 ```{r}
 mammals %>% 
-  select(family, genus, species, max_life) %>% 
-  mutate(max_life_new= ifelse(max_life==-999, NA, max_life)) %>% 
-  arrange(max_life)
+  mutate(max_life_new= ifelse(max_life==-999, NA, max_life)) %>%
+  select(family, genus, species, max_life_new) %>% 
+  arrange(max_life_new)
 ```
 
 ## That's it! Take a break and I will see you on Zoom!  

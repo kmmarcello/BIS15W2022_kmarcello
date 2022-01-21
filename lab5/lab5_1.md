@@ -1,6 +1,6 @@
 ---
 title: "Pipes, `arrange()`, `mutate()`, and `if_else()`"
-date: "2022-01-17"
+date: "2022-01-21"
 output:
   html_document: 
     theme: spacelab

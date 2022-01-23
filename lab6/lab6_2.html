@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2022-01-20" />
+<meta name="date" content="2022-01-23" />
 
 <title>summarize practice, count(), across()</title>
 
@@ -241,7 +241,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">summarize practice, <code>count()</code>, <code>across()</code></h1>
-<h4 class="date">2022-01-20</h4>
+<h4 class="date">2022-01-23</h4>
 
 </div>
 
@@ -283,7 +283,7 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 <pre><code>## [1] &quot;Adelie&quot;    &quot;Chinstrap&quot; &quot;Gentoo&quot;</code></pre>
 <p>As biologists, a good question that we may ask is how do the measured variables differ by island (on average)?</p>
 <pre class="r"><code>penguins %&gt;% 
-  group_by(island) %&gt;% #only want to look at info when grouped by name of island
+  group_by(island) %&gt;% # only want to look at info when grouped by name of island
   summarize(mean_body_mass_g=mean(body_mass_g), # mean of body mass on each island
             n=n())</code></pre>
 <pre><code>## # A tibble: 3 × 3
@@ -292,7 +292,7 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 ## 1 Biscoe                 NA    168
 ## 2 Dream                3713.   124
 ## 3 Torgersen              NA     52</code></pre>
-<p>Why do we have NA here? Do all of these penguins lack data? here we are trying to see how many NAs there are in these data. keep track of MAs! then filter out NAs</p>
+<p>Why do we have NA here? Do all of these penguins lack data? here we are trying to see how many NAs there are in these data. keep track of NAs! then filter out NAs</p>
 <pre class="r"><code>penguins %&gt;% # I only want to look at the info in this dataframe when these groups of islands are squished together
   group_by(island) %&gt;% 
   summarize(number_NAs=sum(is.na(body_mass_g))) #summarize how many(sum) NAs(is.na) are in the column body_mass_g for each island(group_by).</code></pre>
@@ -308,9 +308,9 @@ library(&quot;palmerpenguins&quot;)</code></pre>
   group_by(island) %&gt;% #looking at only islands, we used level to get this
   summarize(mean_body_mass_g=mean(body_mass_g), # mean of each category when grouped by island but more than one category this time
             sd_body_mass_g=sd(body_mass_g),
-            n=n())</code></pre>
+            total=n())</code></pre>
 <pre><code>## # A tibble: 3 × 4
-##   island    mean_body_mass_g sd_body_mass_g     n
+##   island    mean_body_mass_g sd_body_mass_g total
 ##   &lt;fct&gt;                &lt;dbl&gt;          &lt;dbl&gt; &lt;int&gt;
 ## 1 Biscoe               4716.           783.   167
 ## 2 Dream                3713.           417.   124
@@ -369,7 +369,7 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 ##     Adelie     44    56        52
 ##  Chinstrap      0    68         0
 ##     Gentoo    124     0         0</code></pre>
-<pre class="r"><code>penguins %&gt;% # this looks like a wa yto make the data more fancy and give a bit more info
+<pre class="r"><code>penguins %&gt;% # this looks like a way to make the data more fancy and give a bit more info
   tabyl(species, island) %&gt;% 
   adorn_percentages() %&gt;% 
   adorn_pct_formatting(digits = 1) %&gt;%
@@ -386,7 +386,7 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 </ol>
 <pre class="r"><code>penguins %&gt;%
   filter(species==&quot;Adelie&quot;) %&gt;% # from the dataset, penguins, just look at info for species(column) Adelie(value). filteR=rows
-  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %&gt;%  # the only colums we are interested in are these here. seleCt=columns
+  #select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %&gt;%  # the only colums we are interested in are these here. seleCt=columns
   summarize(mean_bill_length_mm=mean(bill_length_mm, na.rm=T), 
             mean_bill_depth_mm=mean(bill_depth_mm, na.rm =T), 
             mean_flipper_length_mm=mean(flipper_length_mm, na.rm =T), 
@@ -400,14 +400,15 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 </ol>
 <pre class="r"><code>penguins %&gt;% 
   group_by(species) %&gt;% 
-  summarize(n=n(), .groups= &#39;keep&#39;)</code></pre>
-<pre><code>## # A tibble: 3 × 2
+  summarize(mean_bill_length = mean(bill_length_mm, na.rm =T),
+            n=n(), .groups= &#39;keep&#39;)</code></pre>
+<pre><code>## # A tibble: 3 × 3
 ## # Groups:   species [3]
-##   species       n
-##   &lt;fct&gt;     &lt;int&gt;
-## 1 Adelie      152
-## 2 Chinstrap    68
-## 3 Gentoo      124</code></pre>
+##   species   mean_bill_length     n
+##   &lt;fct&gt;                &lt;dbl&gt; &lt;int&gt;
+## 1 Adelie                38.8   152
+## 2 Chinstrap             48.8    68
+## 3 Gentoo                47.5   124</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>For some penguins, their sex is listed as NA. Where do these penguins occur?</li>
 </ol>
@@ -425,7 +426,7 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 <h2><code>across()</code></h2>
 <p>Last time we had some great questions on how to use <code>filter()</code> and <code>select()</code> across multiple variables. There is a new function in dplyr called <code>across()</code> which is designed to work across multiple variables. Have a look at Rebecca Barter’s awesome blog <a href="http://www.rebeccabarter.com/blog/2020-07-09-across/">here</a> as I am following her below.</p>
 <p>What if we wanted to apply summarize in order to produce distinct counts over multiple variables; i.e. species, island, and sex? Although this isn’t a lot of coding you can image that with a lot of variables it would be cumbersome.</p>
-<pre class="r"><code>penguins %&gt;%
+<pre class="r"><code>penguins %&gt;% #we want to know how many distinct species there are according to these three columns. 
   summarize(distinct_species = n_distinct(species),
             distinct_island = n_distinct(island),
             distinct_sex = n_distinct(sex))</code></pre>
@@ -488,7 +489,7 @@ library(&quot;palmerpenguins&quot;)</code></pre>
 </ol>
 <pre class="r"><code>penguins %&gt;%
   group_by(species) %&gt;% 
-  summarize(across(contains(&quot;mm&quot;), mean, na.rm=T), n=n())</code></pre>
+  summarize(across(contains(&quot;mm&quot;), mean, na.rm=T), n=n()) </code></pre>
 <pre><code>## # A tibble: 3 × 5
 ##   species   bill_length_mm bill_depth_mm flipper_length_mm     n
 ##   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt; &lt;int&gt;

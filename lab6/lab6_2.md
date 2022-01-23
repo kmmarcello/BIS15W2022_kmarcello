@@ -1,6 +1,6 @@
 ---
 title: "summarize practice, `count()`, `across()`"
-date: "2022-01-20"
+date: "2022-01-23"
 output:
   html_document: 
     theme: spacelab
@@ -68,7 +68,7 @@ As biologists, a good question that we may ask is how do the measured variables 
 
 ```r
 penguins %>% 
-  group_by(island) %>% #only want to look at info when grouped by name of island
+  group_by(island) %>% # only want to look at info when grouped by name of island
   summarize(mean_body_mass_g=mean(body_mass_g), # mean of body mass on each island
             n=n())
 ```
@@ -83,7 +83,7 @@ penguins %>%
 ```
 
 Why do we have NA here? Do all of these penguins lack data?
-here we are trying to see how many NAs there are in these data. keep track of MAs! then filter out NAs
+here we are trying to see how many NAs there are in these data. keep track of NAs! then filter out NAs
 
 ```r
 penguins %>% # I only want to look at the info in this dataframe when these groups of islands are squished together
@@ -109,12 +109,12 @@ penguins %>%
   group_by(island) %>% #looking at only islands, we used level to get this
   summarize(mean_body_mass_g=mean(body_mass_g), # mean of each category when grouped by island but more than one category this time
             sd_body_mass_g=sd(body_mass_g),
-            n=n())
+            total=n())
 ```
 
 ```
 ## # A tibble: 3 × 4
-##   island    mean_body_mass_g sd_body_mass_g     n
+##   island    mean_body_mass_g sd_body_mass_g total
 ##   <fct>                <dbl>          <dbl> <int>
 ## 1 Biscoe               4716.           783.   167
 ## 2 Dream                3713.           417.   124
@@ -211,7 +211,7 @@ penguins %>%
 
 
 ```r
-penguins %>% # this looks like a wa yto make the data more fancy and give a bit more info
+penguins %>% # this looks like a way to make the data more fancy and give a bit more info
   tabyl(species, island) %>% 
   adorn_percentages() %>% 
   adorn_pct_formatting(digits = 1) %>%
@@ -232,7 +232,7 @@ penguins %>% # this looks like a wa yto make the data more fancy and give a bit 
 ```r
 penguins %>%
   filter(species=="Adelie") %>% # from the dataset, penguins, just look at info for species(column) Adelie(value). filteR=rows
-  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %>%  # the only colums we are interested in are these here. seleCt=columns
+  #select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %>%  # the only colums we are interested in are these here. seleCt=columns
   summarize(mean_bill_length_mm=mean(bill_length_mm, na.rm=T), 
             mean_bill_depth_mm=mean(bill_depth_mm, na.rm =T), 
             mean_flipper_length_mm=mean(flipper_length_mm, na.rm =T), 
@@ -250,17 +250,18 @@ penguins %>%
 ```r
 penguins %>% 
   group_by(species) %>% 
-  summarize(n=n(), .groups= 'keep')
+  summarize(mean_bill_length = mean(bill_length_mm, na.rm =T),
+            n=n(), .groups= 'keep')
 ```
 
 ```
-## # A tibble: 3 × 2
+## # A tibble: 3 × 3
 ## # Groups:   species [3]
-##   species       n
-##   <fct>     <int>
-## 1 Adelie      152
-## 2 Chinstrap    68
-## 3 Gentoo      124
+##   species   mean_bill_length     n
+##   <fct>                <dbl> <int>
+## 1 Adelie                38.8   152
+## 2 Chinstrap             48.8    68
+## 3 Gentoo                47.5   124
 ```
 
 3. For some penguins, their sex is listed as NA. Where do these penguins occur?
@@ -286,7 +287,7 @@ Last time we had some great questions on how to use `filter()` and `select()` ac
 What if we wanted to apply summarize in order to produce distinct counts over multiple variables; i.e. species, island, and sex? Although this isn't a lot of coding you can image that with a lot of variables it would be cumbersome.
 
 ```r
-penguins %>%
+penguins %>% #we want to know how many distinct species there are according to these three columns. 
   summarize(distinct_species = n_distinct(species),
             distinct_island = n_distinct(island),
             distinct_sex = n_distinct(sex))
@@ -394,7 +395,7 @@ penguins %>%
 ```r
 penguins %>%
   group_by(species) %>% 
-  summarize(across(contains("mm"), mean, na.rm=T), n=n())
+  summarize(across(contains("mm"), mean, na.rm=T), n=n()) 
 ```
 
 ```
@@ -405,6 +406,7 @@ penguins %>%
 ## 2 Chinstrap           48.8          18.4              196.    68
 ## 3 Gentoo              47.5          15.0              217.   124
 ```
+
 
 ```r
 penguins %>%

@@ -3,9 +3,9 @@ title: "Lab 6 Homework"
 author: "Please Add Your Name Here"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
-    toc: no
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -28,17 +28,19 @@ For this assignment we are going to work with a large data set from the [United 
 
 Load the data `FAO_1950to2012_111914.csv` as a new object titled `fisheries`.
 ```{r}
-
+fisheries <- readr::read_csv("data/FAO_1950to2012_111914.csv")
 ```
 
 1. Do an exploratory analysis of the data (your choice). What are the names of the variables, what are the dimensions, are there any NA's, what are the classes of the variables?  
 ```{r}
-
+skim(fisheries)
 ```
 
 2. Use `janitor` to rename the columns and make them easier to use. As part of this cleaning step, change `country`, `isscaap_group_number`, `asfis_species_number`, and `fao_major_fishing_area` to data class factor. 
 ```{r}
-
+fisheries <- clean_names(fisheries)
+fisheries %>% 
+  mutate_at(vars(country, isscaap_group_number, asfis_species_number, fao_major_fishing_area), factor)
 ```
 
 ```{r}
@@ -50,62 +52,103 @@ Load the data `FAO_1950to2012_111914.csv` as a new object titled `fisheries`.
 
 We need to deal with the years because they are being treated as characters and start with an X. We also have the problem that the column names that are years actually represent data. We haven't discussed tidy data yet, so here is some help. You should run this ugly chunk to transform the data for the rest of the homework. It will only work if you have used janitor to rename the variables in question 2!
 ```{r}
-#fisheries_tidy <- fisheries %>% 
-#  pivot_longer(-c(country,common_name,isscaap_group_number,isscaap_taxonomic_group,asfis_species_number,asfis_species_name,fao_major_fishing_area,measure),
-#               names_to = "year",
-#               values_to = "catch",
-#               values_drop_na = TRUE) %>% 
-#  mutate(year= as.numeric(str_replace(year, 'x', ''))) %>% 
-#  mutate(catch= str_replace(catch, c(' F'), replacement = '')) %>% 
-#  mutate(catch= str_replace(catch, c('...'), replacement = '')) %>% 
-#  mutate(catch= str_replace(catch, c('-'), replacement = '')) %>% 
-#  mutate(catch= str_replace(catch, c('0 0'), replacement = ''))
+fisheries_tidy <- fisheries %>% 
+  pivot_longer(-c(country,common_name,isscaap_group_number,isscaap_taxonomic_group,asfis_species_number,asfis_species_name,fao_major_fishing_area,measure),
+               names_to = "year",
+               values_to = "catch",
+               values_drop_na = TRUE) %>% 
+  mutate(year= as.numeric(str_replace(year, 'x', ''))) %>% 
+  mutate(catch= str_replace(catch, c(' F'), replacement = '')) %>% 
+  mutate(catch= str_replace(catch, c('...'), replacement = '')) %>% 
+  mutate(catch= str_replace(catch, c('-'), replacement = '')) %>% 
+  mutate(catch= str_replace(catch, c('0 0'), replacement = ''))
 
-#fisheries_tidy$catch <- as.numeric(fisheries_tidy$catch)
+fisheries_tidy$catch <- as.numeric(fisheries_tidy$catch)
 ```
 
 3. How many countries are represented in the data? Provide a count and list their names.
 ```{r}
-
+fisheries_tidy %>% 
+  #group_by(country) %>% 
+  summarise(distinct= n_distinct(country))
 ```
 
 ```{r}
-
+fisheries_tidy %>% 
+  group_by(country) %>% 
+  summarise(distinct= n_distinct(country))
 ```
 
 4. Refocus the data only to include only: country, isscaap_taxonomic_group, asfis_species_name, asfis_species_number, year, catch.
 ```{r}
-
+new_fish_data <- fisheries_tidy %>% 
+  select(country, isscaap_taxonomic_group, asfis_species_name, asfis_species_number, year, catch)
+new_fish_data
 ```
 
 5. Based on the asfis_species_number, how many distinct fish species were caught as part of these data?
 ```{r}
-
+new_fish_data %>% 
+  group_by(asfis_species_number) %>% 
+  summarise(distinct_asfis_species_name = n_distinct(asfis_species_name))
+```
+```{r}
+names(fisheries_tidy)
 ```
 
-6. Which country had the largest overall catch in the year 2000?
+6. Which country had the largest overall catch in the year 2000? China
 ```{r}
-
+fisheries_tidy %>% 
+  group_by(country) %>% 
+  filter(year == "2000") %>% 
+  summarise(catch_tot = sum(catch, na.rm =T)) %>% 
+  arrange(desc(catch_tot))
 ```
 
-7. Which country caught the most sardines (_Sardina pilchardus_) between the years 1990-2000?
+7. Which country caught the most sardines (_Sardina pilchardus_) between the years 1990-2000? Morocco
 ```{r}
-
+fisheries_tidy %>% 
+  group_by(country) %>% 
+  filter(asfis_species_name =="Sardina pilchardus") %>% 
+  filter(between(year, 1990,2000)) %>% 
+  summarise(catch_tot = sum(catch, na.rm =T)) %>% 
+  arrange(desc(catch_tot))
 ```
 
 8. Which five countries caught the most cephalopods between 2008-2012?
 ```{r}
-
+head(fisheries_tidy)
 ```
 
-9. Which species had the highest catch total between 2008-2012? (hint: Osteichthyes is not a species)
-```{r}
 
+```{r}
+fisheries_tidy %>% 
+  group_by(country) %>% 
+  filter(isscaap_taxonomic_group == "Squids, cuttlefishes, octopuses") %>% 
+  filter(between(year, 2008,2012)) %>% 
+  summarise(catch_tot = sum(catch, na.rm =T)) %>% 
+  arrange(desc(catch_tot))
+```
+```{r}
+names(fisheries_tidy)
+```
+
+9. Which species had the highest catch total between 2008-2012? (hint: Osteichthyes is not a species) Alaska pollock 
+```{r}
+fisheries_tidy %>% 
+  group_by(asfis_species_name, common_name, isscaap_taxonomic_group) %>% 
+  filter(between(year, 2008,2012)) %>% 
+  summarise(catch_tot = sum(catch, na.rm =T)) %>% 
+  arrange(desc(catch_tot))
+  
 ```
 
 10. Use the data to do at least one analysis of your choice.
 ```{r}
-
+fisheries_tidy %>% 
+  group_by(year) %>% 
+  summarise(catch_tot = sum(catch, na.rm =T)) %>% 
+  arrange(desc(catch_tot))
 ```
 
 ## Push your final code to GitHub!

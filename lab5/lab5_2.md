@@ -1,6 +1,6 @@
 ---
 title: "dplyr Superhero"
-date: "2022-01-20"
+date: "2022-01-21"
 output:
   html_document: 
     theme: spacelab
@@ -179,16 +179,57 @@ superhero_info <- janitor::clean_names(superhero_info)
 The `janitor` package has many awesome functions that we will explore. Here is its version of `table` which not only produces counts but also percentages. Very handy! Let's use it to explore the proportion of good guys and bad guys in the `superhero_info` data.  
 
 ```r
-tabyl(superhero_info, alignment)
+tabyl(superhero_info, alignment, race)
 ```
 
 ```
-##  alignment   n     percent valid_percent
-##        bad 207 0.282016349    0.28473177
-##       good 496 0.675749319    0.68225585
-##    neutral  24 0.032697548    0.03301238
-##       <NA>   7 0.009536785            NA
+##  alignment Alien Alpha Amazon Android Animal Asgardian Atlantean Bizarro
+##        bad     2     0      0       5      2         2         1       0
+##       good     3     5      2       4      2         3         4       0
+##    neutral     1     0      0       0      0         0         0       1
+##       <NA>     1     0      0       0      0         0         0       0
+##  Bolovaxian Clone Cosmic Entity Cyborg Czarnian Dathomirian Zabrak Demi-God
+##           0     0             1      8        0                  1        0
+##           1     1             0      3        0                  0        2
+##           0     0             3      0        1                  0        0
+##           0     0             0      0        0                  0        0
+##  Demon Eternal Flora Colossus Frost Giant God / Eternal Gorilla Gungan Human
+##      2       1              0           1             5       1      0    50
+##      3       1              1           1             6       0      1   148
+##      1       0              0           0             1       0      0     9
+##      0       0              0           0             2       0      0     1
+##  Human / Altered Human / Clone Human / Cosmic Human / Radiation Human-Kree
+##                1             1              0                 2          0
+##                2             0              2                 8          2
+##                0             0              0                 1          0
+##                0             0              0                 0          0
+##  Human-Spartoi Human-Vulcan Human-Vuldarian Icthyo Sapien Inhuman Kaiju
+##              0            0               0             0       0     1
+##              1            1               1             1       4     0
+##              0            0               0             0       0     0
+##              0            0               0             0       0     0
+##  Kakarantharaian Korugaran Kryptonian Luphomoid Maiar Martian Metahuman Mutant
+##                0         0          3         1     1       0         1     12
+##                1         0          4         0     0       1         1     46
+##                0         1          0         0     0       0         0      4
+##                0         0          0         0     0       0         0      1
+##  Mutant / Clone New God Neyaphem Parademon Planet Rodian Saiyan Spartoi
+##               0       3        1         1      0      1      1       1
+##               1       0        0         0      1      0      1       0
+##               0       0        0         0      0      0      0       0
+##               0       0        0         0      0      0      0       0
+##  Strontian Symbiote Talokite Tamaranean Ungaran Vampire Xenomorph XX121 Yautja
+##          0        4        0          0       0       0               1      1
+##          0        3        1          1       1       2               0      0
+##          1        0        0          0       0       0               0      0
+##          0        2        0          0       0       0               0      0
+##  Yoda's species Zen-Whoberian Zombie NA_
+##               0             0      1  87
+##               1             1      0 217
+##               0             0      0   0
+##               0             0      0   0
 ```
+
 
 ```r
 names(superhero_info)
@@ -202,49 +243,51 @@ names(superhero_info)
 2. Notice that we have some neutral superheros! Who are they?
 
 ```r
-neutral_heros <- select(superhero_info, "name")
+neutral_heros <- superhero_info %>% 
+  filter(alignment == "neutral") %>% 
+  select(name)
 neutral_heros
 ```
 
 ```
-## # A tibble: 734 × 1
-##    name         
-##    <chr>        
-##  1 A-Bomb       
-##  2 Abe Sapien   
-##  3 Abin Sur     
-##  4 Abomination  
-##  5 Abraxas      
-##  6 Absorbing Man
-##  7 Adam Monroe  
-##  8 Adam Strange 
-##  9 Agent 13     
-## 10 Agent Bob    
-## # … with 724 more rows
+## # A tibble: 24 × 1
+##    name        
+##    <chr>       
+##  1 Bizarro     
+##  2 Black Flash 
+##  3 Captain Cold
+##  4 Copycat     
+##  5 Deadpool    
+##  6 Deathstroke 
+##  7 Etrigan     
+##  8 Galactus    
+##  9 Gladiator   
+## 10 Indigo      
+## # … with 14 more rows
 ```
 
 ## `superhero_info`
 3. Let's say we are only interested in the variables name, alignment, and "race". How would you isolate these variables from `superhero_info`?
 
 ```r
-some_heros <- select(superhero_info, "name", "alignment", "race")
-some_heros
+superhero_info %>% 
+  select(alignment, name, race)
 ```
 
 ```
 ## # A tibble: 734 × 3
-##    name          alignment race             
-##    <chr>         <chr>     <chr>            
-##  1 A-Bomb        good      Human            
-##  2 Abe Sapien    good      Icthyo Sapien    
-##  3 Abin Sur      good      Ungaran          
-##  4 Abomination   bad       Human / Radiation
-##  5 Abraxas       bad       Cosmic Entity    
-##  6 Absorbing Man bad       Human            
-##  7 Adam Monroe   good      <NA>             
-##  8 Adam Strange  good      Human            
-##  9 Agent 13      good      <NA>             
-## 10 Agent Bob     good      Human            
+##    alignment name          race             
+##    <chr>     <chr>         <chr>            
+##  1 good      A-Bomb        Human            
+##  2 good      Abe Sapien    Icthyo Sapien    
+##  3 good      Abin Sur      Ungaran          
+##  4 bad       Abomination   Human / Radiation
+##  5 bad       Abraxas       Cosmic Entity    
+##  6 bad       Absorbing Man Human            
+##  7 good      Adam Monroe   <NA>             
+##  8 good      Adam Strange  Human            
+##  9 good      Agent 13      <NA>             
+## 10 good      Agent Bob     Human            
 ## # … with 724 more rows
 ```
 
@@ -252,33 +295,35 @@ some_heros
 4. List all of the superheros that are not human.
 
 ```r
-not_human_heros <- filter(superhero_info, race != "Human")
-not_human_heros
+superhero_info %>% 
+  filter(race != "Human") %>% 
+  select(name)
 ```
 
 ```
-## # A tibble: 222 × 10
-##    name  gender eye_color race  hair_color height publisher skin_color alignment
-##    <chr> <chr>  <chr>     <chr> <chr>       <dbl> <chr>     <chr>      <chr>    
-##  1 Abe … Male   blue      Icth… No Hair       191 Dark Hor… blue       good     
-##  2 Abin… Male   blue      Unga… No Hair       185 DC Comics red        good     
-##  3 Abom… Male   green     Huma… No Hair       203 Marvel C… <NA>       bad      
-##  4 Abra… Male   blue      Cosm… Black          NA Marvel C… <NA>       bad      
-##  5 Ajax  Male   brown     Cybo… Black         193 Marvel C… <NA>       bad      
-##  6 Alien Male   <NA>      Xeno… No Hair       244 Dark Hor… black      bad      
-##  7 Amazo Male   red       Andr… <NA>          257 DC Comics <NA>       bad      
-##  8 Angel Male   <NA>      Vamp… <NA>           NA Dark Hor… <NA>       good     
-##  9 Ange… Female yellow    Muta… Black         165 Marvel C… <NA>       good     
-## 10 Anti… Male   yellow    God … No Hair        61 DC Comics <NA>       bad      
-## # … with 212 more rows, and 1 more variable: weight <dbl>
+## # A tibble: 222 × 1
+##    name        
+##    <chr>       
+##  1 Abe Sapien  
+##  2 Abin Sur    
+##  3 Abomination 
+##  4 Abraxas     
+##  5 Ajax        
+##  6 Alien       
+##  7 Amazo       
+##  8 Angel       
+##  9 Angel Dust  
+## 10 Anti-Monitor
+## # … with 212 more rows
 ```
 
 ## Good and Evil
 5. Let's make two different data frames, one focused on the "good guys" and another focused on the "bad guys".
 
 ```r
-good_guys <- filter(superhero_info, alignment == "good")
-good_guys
+good_guy <- superhero_info %>% 
+  filter(alignment == "good")
+good_guy
 ```
 
 ```
@@ -299,8 +344,9 @@ good_guys
 ```
 
 ```r
-bad_guys <- filter(superhero_info, alignment == "bad")
-bad_guys
+bad_guy <- superhero_info %>% 
+  filter(alignment == "bad")
+bad_guy
 ```
 
 ```
@@ -320,10 +366,25 @@ bad_guys
 ## # … with 197 more rows, and 1 more variable: weight <dbl>
 ```
 
+```r
+superhero_info %>% 
+  filter(skin_color == "purple")
+```
+
+```
+## # A tibble: 3 × 10
+##   name   gender eye_color race  hair_color height publisher skin_color alignment
+##   <chr>  <chr>  <chr>     <chr> <chr>       <dbl> <chr>     <chr>      <chr>    
+## 1 Gladi… Male   blue      Stro… Blue          198 Marvel C… purple     neutral  
+## 2 Purpl… Male   purple    Human Purple        180 Marvel C… purple     bad      
+## 3 Thanos Male   red       Eter… No Hair       201 Marvel C… purple     bad      
+## # … with 1 more variable: weight <dbl>
+```
+
 6. For the good guys, use the `tabyl` function to summarize their "race".
 
 ```r
-tabyl(good_guys, race)
+tabyl(good_guy, race)
 ```
 
 ```
@@ -386,7 +447,7 @@ names(superhero_info)
 
 
 ```r
-asgardians <- filter(good_guys, race == "Asgardian")
+asgardians <- filter(good_guy, race == "Asgardian")
 asgardians
 ```
 
@@ -403,51 +464,123 @@ asgardians
 8. Among the bad guys, who are the male humans over 200 inches in height?
 
 ```r
-tall_bad_guys <- filter(bad_guys, height >= 200)
-tall_bad_guys
+superhero_info %>% 
+  filter(alignment == "bad" & gender == "Male" & race == "Human" & height >= 200)
 ```
 
 ```
-## # A tibble: 25 × 10
-##    name  gender eye_color race  hair_color height publisher skin_color alignment
-##    <chr> <chr>  <chr>     <chr> <chr>       <dbl> <chr>     <chr>      <chr>    
-##  1 Abom… Male   green     Huma… No Hair       203 Marvel C… <NA>       bad      
-##  2 Alien Male   <NA>      Xeno… No Hair       244 Dark Hor… black      bad      
-##  3 Amazo Male   red       Andr… <NA>          257 DC Comics <NA>       bad      
-##  4 Apoc… Male   red       Muta… Black         213 Marvel C… grey       bad      
-##  5 Bane  Male   <NA>      Human <NA>          203 DC Comics <NA>       bad      
-##  6 Bloo… Female blue      Human Brown         218 Marvel C… <NA>       bad      
-##  7 Dark… Male   red       New … No Hair       267 DC Comics grey       bad      
-##  8 Doct… Male   brown     Human Brown         201 Marvel C… <NA>       bad      
-##  9 Doct… Male   brown     <NA>  Brown         201 Marvel C… <NA>       bad      
-## 10 Doom… Male   red       Alien White         244 DC Comics <NA>       bad      
-## # … with 15 more rows, and 1 more variable: weight <dbl>
+## # A tibble: 5 × 10
+##   name   gender eye_color race  hair_color height publisher skin_color alignment
+##   <chr>  <chr>  <chr>     <chr> <chr>       <dbl> <chr>     <chr>      <chr>    
+## 1 Bane   Male   <NA>      Human <NA>          203 DC Comics <NA>       bad      
+## 2 Docto… Male   brown     Human Brown         201 Marvel C… <NA>       bad      
+## 3 Kingp… Male   blue      Human No Hair       201 Marvel C… <NA>       bad      
+## 4 Lizard Male   red       Human No Hair       203 Marvel C… <NA>       bad      
+## 5 Scorp… Male   brown     Human Brown         211 Marvel C… <NA>       bad      
+## # … with 1 more variable: weight <dbl>
 ```
 
 9. OK, so are there more good guys or bad guys that are bald (personal interest)? more good guys
 
 ```r
-table(good_guys$hair_color)
+superhero_info %>% 
+  filter(is.na(hair_color))
 ```
 
 ```
-## 
-##           Auburn            black            Black            blond 
-##               10                3              108                2 
-##            Blond             Blue            Brown    Brown / Black 
-##               85                1               55                1 
-##    Brown / White            Green             Grey           Indigo 
-##                4                7                2                1 
-##          Magenta          No Hair           Orange   Orange / White 
-##                1               37                2                1 
-##             Pink           Purple              Red      Red / White 
-##                1                1               40                1 
-##           Silver Strawberry Blond            White           Yellow 
-##                3                4               10                2
+## # A tibble: 172 × 10
+##    name  gender eye_color race  hair_color height publisher skin_color alignment
+##    <chr> <chr>  <chr>     <chr> <chr>       <dbl> <chr>     <chr>      <chr>    
+##  1 Agen… Male   <NA>      <NA>  <NA>          191 Marvel C… <NA>       good     
+##  2 Alex… Male   <NA>      Human <NA>           NA Wildstorm <NA>       bad      
+##  3 Alex… Male   <NA>      <NA>  <NA>           NA NBC - He… <NA>       good     
+##  4 Alla… Male   <NA>      <NA>  <NA>           NA Wildstorm <NA>       good     
+##  5 Amazo Male   red       Andr… <NA>          257 DC Comics <NA>       bad      
+##  6 Ando… Male   <NA>      <NA>  <NA>           NA NBC - He… <NA>       good     
+##  7 Angel Male   <NA>      Vamp… <NA>           NA Dark Hor… <NA>       good     
+##  8 Ange… Female <NA>      <NA>  <NA>           NA Image Co… <NA>       bad      
+##  9 Anti… Male   <NA>      <NA>  <NA>           NA Image Co… <NA>       bad      
+## 10 Arse… Male   <NA>      Human <NA>           NA DC Comics <NA>       good     
+## # … with 162 more rows, and 1 more variable: weight <dbl>
+```
+
+
+
+```r
+tabyl(superhero_info, hair_color, alignment)
+```
+
+```
+##        hair_color bad good neutral NA_
+##            Auburn   3   10       0   0
+##             black   0    3       0   0
+##             Black  42  108       8   0
+##      Black / Blue   1    0       0   0
+##             blond   1    2       0   0
+##             Blond  11   85       1   2
+##              Blue   1    1       1   0
+##             Brown  27   55       4   0
+##     Brown / Black   0    1       0   0
+##     Brown / White   0    4       0   0
+##            Brownn   1    0       0   0
+##              Gold   1    0       0   0
+##             Green   1    7       0   0
+##              Grey   3    2       0   0
+##            Indigo   0    1       0   0
+##           Magenta   0    1       0   0
+##           No Hair  35   37       3   0
+##            Orange   0    2       0   0
+##    Orange / White   0    1       0   0
+##              Pink   0    1       0   0
+##            Purple   3    1       1   0
+##               Red   9   40       2   0
+##        Red / Grey   1    0       0   0
+##      Red / Orange   1    0       0   0
+##       Red / White   0    1       0   0
+##            Silver   0    3       0   1
+##  Strawberry Blond   3    4       0   0
+##             White  10   10       2   1
+##            Yellow   0    2       0   0
+##              <NA>  53  114       2   3
+```
+
+
+
+```r
+tabyl(good_guy, hair_color)
+```
+
+```
+##        hair_color   n     percent valid_percent
+##            Auburn  10 0.020161290   0.026178010
+##             black   3 0.006048387   0.007853403
+##             Black 108 0.217741935   0.282722513
+##             blond   2 0.004032258   0.005235602
+##             Blond  85 0.171370968   0.222513089
+##              Blue   1 0.002016129   0.002617801
+##             Brown  55 0.110887097   0.143979058
+##     Brown / Black   1 0.002016129   0.002617801
+##     Brown / White   4 0.008064516   0.010471204
+##             Green   7 0.014112903   0.018324607
+##              Grey   2 0.004032258   0.005235602
+##            Indigo   1 0.002016129   0.002617801
+##           Magenta   1 0.002016129   0.002617801
+##           No Hair  37 0.074596774   0.096858639
+##            Orange   2 0.004032258   0.005235602
+##    Orange / White   1 0.002016129   0.002617801
+##              Pink   1 0.002016129   0.002617801
+##            Purple   1 0.002016129   0.002617801
+##               Red  40 0.080645161   0.104712042
+##       Red / White   1 0.002016129   0.002617801
+##            Silver   3 0.006048387   0.007853403
+##  Strawberry Blond   4 0.008064516   0.010471204
+##             White  10 0.020161290   0.026178010
+##            Yellow   2 0.004032258   0.005235602
+##              <NA> 114 0.229838710            NA
 ```
 
 ```r
-table(bad_guys$hair_color)
+table(bad_guy$hair_color)
 ```
 
 ```
@@ -466,47 +599,51 @@ table(bad_guys$hair_color)
 10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 200 or weight over 300?
 
 ```r
-big_heros <- filter(superhero_info, between(weight, 200, 300))
+big_heros <- superhero_info %>% 
+  filter(xor(weight >= 300, height >= 200))
 big_heros
 ```
 
 ```
-## # A tibble: 23 × 10
+## # A tibble: 37 × 10
 ##    name  gender eye_color race  hair_color height publisher skin_color alignment
 ##    <chr> <chr>  <chr>     <chr> <chr>       <dbl> <chr>     <chr>      <chr>    
-##  1 Ares  Male   brown     <NA>  Brown         185 Marvel C… <NA>       good     
-##  2 Beta… Male   <NA>      <NA>  No Hair       201 Marvel C… <NA>       good     
-##  3 Blob  Male   brown     <NA>  Brown         178 Marvel C… <NA>       bad      
-##  4 Colo… Male   silver    Muta… Black         226 Marvel C… <NA>       good     
-##  5 Etri… Male   red       Demon No Hair       193 DC Comics yellow     neutral  
-##  6 Glad… Male   blue      Stro… Blue          198 Marvel C… purple     neutral  
-##  7 Gori… Male   yellow    Gori… Black         198 DC Comics <NA>       bad      
-##  8 Hela  Female green     Asga… Black         213 Marvel C… <NA>       bad      
-##  9 Hype… Male   blue      Eter… Red           183 Marvel C… <NA>       good     
-## 10 King… Male   blue      Human No Hair       201 Marvel C… <NA>       bad      
-## # … with 13 more rows, and 1 more variable: weight <dbl>
+##  1 Alien Male   <NA>      Xeno… No Hair       244 Dark Hor… black      bad      
+##  2 Amazo Male   red       Andr… <NA>          257 DC Comics <NA>       bad      
+##  3 Ant-… Male   blue      Human Blond         211 Marvel C… <NA>       good     
+##  4 Apoc… Male   red       Muta… Black         213 Marvel C… grey       bad      
+##  5 Bane  Male   <NA>      Human <NA>          203 DC Comics <NA>       bad      
+##  6 Beta… Male   <NA>      <NA>  No Hair       201 Marvel C… <NA>       good     
+##  7 Cable Male   blue      Muta… White         203 Marvel C… <NA>       good     
+##  8 Cent… Male   white     Alien White         201 Marvel C… grey       good     
+##  9 Cloak Male   brown     <NA>  black         226 Marvel C… <NA>       good     
+## 10 Colo… Male   silver    Muta… Black         226 Marvel C… <NA>       good     
+## # … with 27 more rows, and 1 more variable: weight <dbl>
 ```
 
 11. Just to be clear on the `|` operator,  have a look at the superheros over 300 in height...
 
 ```r
-tall_heros <- filter(superhero_info, height >=300)
+tall_heros <- superhero_info %>% 
+  filter(height >= 200)
 tall_heros
 ```
 
 ```
-## # A tibble: 8 × 10
-##   name   gender eye_color race  hair_color height publisher skin_color alignment
-##   <chr>  <chr>  <chr>     <chr> <chr>       <dbl> <chr>     <chr>      <chr>    
-## 1 Fin F… Male   red       Kaka… No Hair      975  Marvel C… green      good     
-## 2 Galac… Male   black     Cosm… Black        876  Marvel C… <NA>       neutral  
-## 3 Groot  Male   yellow    Flor… <NA>         701  Marvel C… <NA>       good     
-## 4 MODOK  Male   white     Cybo… Brownn       366  Marvel C… <NA>       bad      
-## 5 Onsla… Male   red       Muta… No Hair      305  Marvel C… <NA>       bad      
-## 6 Sasqu… Male   red       <NA>  Orange       305  Marvel C… <NA>       good     
-## 7 Wolfs… Female green     <NA>  Auburn       366  Marvel C… <NA>       good     
-## 8 Ymir   Male   white     Fros… No Hair      305. Marvel C… white      good     
-## # … with 1 more variable: weight <dbl>
+## # A tibble: 59 × 10
+##    name  gender eye_color race  hair_color height publisher skin_color alignment
+##    <chr> <chr>  <chr>     <chr> <chr>       <dbl> <chr>     <chr>      <chr>    
+##  1 A-Bo… Male   yellow    Human No Hair       203 Marvel C… <NA>       good     
+##  2 Abom… Male   green     Huma… No Hair       203 Marvel C… <NA>       bad      
+##  3 Alien Male   <NA>      Xeno… No Hair       244 Dark Hor… black      bad      
+##  4 Amazo Male   red       Andr… <NA>          257 DC Comics <NA>       bad      
+##  5 Ant-… Male   blue      Human Blond         211 Marvel C… <NA>       good     
+##  6 Anti… Male   blue      Symb… Blond         229 Marvel C… <NA>       <NA>     
+##  7 Apoc… Male   red       Muta… Black         213 Marvel C… grey       bad      
+##  8 Bane  Male   <NA>      Human <NA>          203 DC Comics <NA>       bad      
+##  9 Beta… Male   <NA>      <NA>  No Hair       201 Marvel C… <NA>       good     
+## 10 Bloo… Female blue      Human Brown         218 Marvel C… <NA>       bad      
+## # … with 49 more rows, and 1 more variable: weight <dbl>
 ```
 
 12. ...and the superheros over 450 in weight. Bonus question! Why do we not have 16 rows in question #10?
@@ -541,65 +678,27 @@ big_and_tall
 13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
 
 ```r
-tabyl(superhero_info, height)
+superhero_info %>% 
+  select(name, height, weight) %>% 
+  mutate(hw_ratio = height/weight) %>% 
+  arrange(hw_ratio)
 ```
 
 ```
-##  height   n     percent valid_percent
-##    15.2   1 0.001362398   0.001934236
-##    30.5   2 0.002724796   0.003868472
-##    61.0   1 0.001362398   0.001934236
-##    62.5   1 0.001362398   0.001934236
-##    64.0   1 0.001362398   0.001934236
-##    66.0   1 0.001362398   0.001934236
-##    71.0   1 0.001362398   0.001934236
-##    79.0   1 0.001362398   0.001934236
-##   108.0   1 0.001362398   0.001934236
-##   122.0   2 0.002724796   0.003868472
-##   137.0   2 0.002724796   0.003868472
-##   140.0   1 0.001362398   0.001934236
-##   142.0   1 0.001362398   0.001934236
-##   155.0   3 0.004087193   0.005802708
-##   157.0   5 0.006811989   0.009671180
-##   160.0   1 0.001362398   0.001934236
-##   163.0   8 0.010899183   0.015473888
-##   165.0  26 0.035422343   0.050290135
-##   168.0  29 0.039509537   0.056092843
-##   170.0  26 0.035422343   0.050290135
-##   173.0  17 0.023160763   0.032882012
-##   175.0  34 0.046321526   0.065764023
-##   178.0  39 0.053133515   0.075435203
-##   180.0  38 0.051771117   0.073500967
-##   183.0  59 0.080381471   0.114119923
-##   185.0  35 0.047683924   0.067698259
-##   188.0  51 0.069482289   0.098646035
-##   191.0  21 0.028610354   0.040618956
-##   193.0  21 0.028610354   0.040618956
-##   196.0  11 0.014986376   0.021276596
-##   198.0  18 0.024523161   0.034816248
-##   201.0  11 0.014986376   0.021276596
-##   203.0   5 0.006811989   0.009671180
-##   206.0   2 0.002724796   0.003868472
-##   211.0   5 0.006811989   0.009671180
-##   213.0   7 0.009536785   0.013539652
-##   218.0   3 0.004087193   0.005802708
-##   226.0   3 0.004087193   0.005802708
-##   229.0   3 0.004087193   0.005802708
-##   234.0   1 0.001362398   0.001934236
-##   244.0   4 0.005449591   0.007736944
-##   257.0   1 0.001362398   0.001934236
-##   259.0   1 0.001362398   0.001934236
-##   267.0   1 0.001362398   0.001934236
-##   279.0   2 0.002724796   0.003868472
-##   287.0   1 0.001362398   0.001934236
-##   297.0   1 0.001362398   0.001934236
-##   304.8   1 0.001362398   0.001934236
-##   305.0   2 0.002724796   0.003868472
-##   366.0   2 0.002724796   0.003868472
-##   701.0   1 0.001362398   0.001934236
-##   876.0   1 0.001362398   0.001934236
-##   975.0   1 0.001362398   0.001934236
-##      NA 217 0.295640327            NA
+## # A tibble: 734 × 4
+##    name        height weight hw_ratio
+##    <chr>        <dbl>  <dbl>    <dbl>
+##  1 Giganta       62.5    630   0.0992
+##  2 Utgard-Loki   15.2     58   0.262 
+##  3 Darkseid     267      817   0.327 
+##  4 Juggernaut   287      855   0.336 
+##  5 Red Hulk     213      630   0.338 
+##  6 Sasquatch    305      900   0.339 
+##  7 Hulk         244      630   0.387 
+##  8 Bloodaxe     218      495   0.440 
+##  9 Thanos       201      443   0.454 
+## 10 A-Bomb       203      441   0.460 
+## # … with 724 more rows
 ```
 
 ```r
@@ -658,9 +757,47 @@ head(superhero_powers)
 
 14. How many superheros have a combination of accelerated healing, durability, and super strength?
 
+```r
+superhero_powers %>% 
+  filter(accelerated_healing == TRUE & durability == TRUE & super_strength == TRUE) %>% 
+  select(hero_names)
+```
+
+```
+## # A tibble: 97 × 1
+##    hero_names  
+##    <chr>       
+##  1 A-Bomb      
+##  2 Abe Sapien  
+##  3 Angel       
+##  4 Anti-Monitor
+##  5 Anti-Venom  
+##  6 Aquaman     
+##  7 Arachne     
+##  8 Archangel   
+##  9 Ardina      
+## 10 Ares        
+## # … with 87 more rows
+```
 
 ## `kinesis`
 15. We are only interested in the superheros that do some kind of "kinesis". How would we isolate them from the `superhero_powers` data?
+
+```r
+kinesis <- superhero_powers %>% 
+  select(hero_names, contains("kinesis")) %>% 
+  filter(across(contains("kinesis"), .==T))
+  #filter(cryokinesis==T | electrokinesis==T | telekinesis==T | hyperkinesis==T | thirstokinesis
+#==T | biokinesis==T | terrakinesis==T | vitakinesis==T)
+kinesis
+```
+this is way too hard.
+
+```r
+#kinesis <- superhero_powers %>% 
+  #select(hero_names, contains("kinesis")) %>% 
+  #filter(across(contains("kinesis"), any()))
+```
 
 
 16. Pick your favorite superhero and let's see their powers!
@@ -668,7 +805,7 @@ head(superhero_powers)
 
 ```r
 superhero_powers %>% 
-  filter(hero_names == "Abraxas") %>% 
+  filter(hero_names == "Purple Man") %>% 
   select_if(all_vars(.=='TRUE'))
 ```
 
@@ -680,14 +817,76 @@ superhero_powers %>%
 ```
 
 ```
-## # A tibble: 1 × 14
-##   dimensional_awar… flight intelligence super_strength size_changing super_speed
-##   <lgl>             <lgl>  <lgl>        <lgl>          <lgl>         <lgl>      
-## 1 TRUE              TRUE   TRUE         TRUE           TRUE          TRUE       
-## # … with 8 more variables: teleportation <lgl>, magic <lgl>,
-## #   dimensional_travel <lgl>, immortality <lgl>, invulnerability <lgl>,
-## #   molecular_manipulation <lgl>, energy_manipulation <lgl>, power_cosmic <lgl>
+## # A tibble: 1 × 5
+##   accelerated_healing telepathy substance_secretion mind_control hypnokinesis
+##   <lgl>               <lgl>     <lgl>               <lgl>        <lgl>       
+## 1 TRUE                TRUE      TRUE                TRUE         TRUE
 ```
 
+```r
+superhero_powers %>% 
+  filter(hero_names == "Chuck Norris") %>% 
+  select_if(all_vars(.=='TRUE'))
+```
+
+```
+## # A tibble: 1 × 1
+##   peak_human_condition
+##   <lgl>               
+## 1 TRUE
+```
+
+
+```r
+superhero_powers %>% 
+  select(hero_names, substance_secretion) %>% 
+  filter(substance_secretion ==T)
+```
+
+```
+## # A tibble: 17 × 2
+##    hero_names    substance_secretion
+##    <chr>         <lgl>              
+##  1 Alex Mercer   TRUE               
+##  2 Alien         TRUE               
+##  3 Fin Fang Foom TRUE               
+##  4 Hellgramite   TRUE               
+##  5 Hybrid        TRUE               
+##  6 Jack-Jack     TRUE               
+##  7 Man-Thing     TRUE               
+##  8 Maya Herrera  TRUE               
+##  9 Poison Ivy    TRUE               
+## 10 Purple Man    TRUE               
+## 11 Quill         TRUE               
+## 12 Silk          TRUE               
+## 13 Spider-Gwen   TRUE               
+## 14 Spider-Man    TRUE               
+## 15 Sunspot       TRUE               
+## 16 Toad          TRUE               
+## 17 Toxin         TRUE
+```
+
+```r
+superhero_powers %>% 
+  select(hero_names, peak_human_condition) %>% 
+  filter(peak_human_condition ==T)
+```
+
+```
+## # A tibble: 30 × 2
+##    hero_names      peak_human_condition
+##    <chr>           <lgl>               
+##  1 Batgirl IV      TRUE                
+##  2 Batman          TRUE                
+##  3 Batman II       TRUE                
+##  4 Black Lightning TRUE                
+##  5 Black Manta     TRUE                
+##  6 Black Panther   TRUE                
+##  7 Black Widow     TRUE                
+##  8 Captain America TRUE                
+##  9 Catwoman        TRUE                
+## 10 Chuck Norris    TRUE                
+## # … with 20 more rows
+```
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.  

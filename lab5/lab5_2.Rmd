@@ -114,7 +114,7 @@ superhero_info %>%
 
 6. For the good guys, use the `tabyl` function to summarize their "race".
 ```{r}
-tabyl(good_guys, race)
+tabyl(good_guy, race)
 ```
 
 7. Among the good guys, Who are the Asgardians?
@@ -123,7 +123,7 @@ names(superhero_info)
 ```
 
 ```{r}
-asgardians <- filter(good_guys, race == "Asgardian")
+asgardians <- filter(good_guy, race == "Asgardian")
 asgardians
 ```
 
@@ -149,7 +149,7 @@ tabyl(superhero_info, hair_color, alignment)
 tabyl(good_guy, hair_color)
 ```
 ```{r}
-table(bad_guys$hair_color)
+table(bad_guy$hair_color)
 ```
 10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 200 or weight over 300?
 ```{r}
@@ -201,7 +201,7 @@ superhero_powers %>%
 
 ## `kinesis`
 15. We are only interested in the superheros that do some kind of "kinesis". How would we isolate them from the `superhero_powers` data?
-```{r}
+```{r eval=FALSE}
 kinesis <- superhero_powers %>% 
   select(hero_names, contains("kinesis")) %>% 
   filter(across(contains("kinesis"), .==T))

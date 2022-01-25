@@ -209,7 +209,9 @@ elephants %>%
 elephants %>% 
   group_by(sex) %>% 
   filter(age > "20") %>% 
-  summarise(mean_height = mean(height), min_height = min(height), max_height =max(height), n=n())
+  summarise(mean_height = mean(height), min_height = min(height), 
+            max_height =max(height), 
+            n=n())
 ```
 
 ```
@@ -385,7 +387,9 @@ head(vertebrates)
 vertebrates %>% 
   group_by(hunt_cat) %>%  
   filter(hunt_cat != "None") %>% 
-  summarise(mean_diversity_bird_species = mean(diversity_bird_species), mean_diversity_mammal_species = mean(diversity_mammal_species), n=n())
+  summarise(mean_diversity_bird_species = mean(diversity_bird_species), 
+            mean_diversity_mammal_species = mean(diversity_mammal_species), 
+            n=n())
 ```
 
 ```
@@ -404,7 +408,8 @@ vertebrates %>%
 vertebrates %>% 
   filter(xor(distance <=3, distance >= 25)) %>% 
   group_by(distance) %>% 
-  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), mean, na.rm=T))
+  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), 
+                   mean, na.rm=T))
 ```
 
 ```
@@ -422,7 +427,8 @@ vertebrates %>%
 vertebrates %>% 
   filter(xor(num_households <= 20, num_households >= 50)) %>% 
   group_by(num_households) %>% 
-  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), mean, na.rm=T))
+  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), 
+                   mean, na.rm=T))
 ```
 
 ```

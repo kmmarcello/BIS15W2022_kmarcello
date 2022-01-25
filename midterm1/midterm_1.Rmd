@@ -86,7 +86,9 @@ elephants %>%
 elephants %>% 
   group_by(sex) %>% 
   filter(age > "20") %>% 
-  summarise(mean_height = mean(height), min_height = min(height), max_height =max(height), n=n())
+  summarise(mean_height = mean(height), min_height = min(height), 
+            max_height =max(height), 
+            n=n())
 ```
 For the next series of questions, we will use data from a study on vertebrate community composition and impacts from defaunation in [Gabon, Africa](https://en.wikipedia.org/wiki/Gabon). One thing to notice is that the data include 24 separate transects. Each transect represents a path through different forest management areas.  
 
@@ -124,7 +126,9 @@ head(vertebrates)
 vertebrates %>% 
   group_by(hunt_cat) %>%  
   filter(hunt_cat != "None") %>% 
-  summarise(mean_diversity_bird_species = mean(diversity_bird_species), mean_diversity_mammal_species = mean(diversity_mammal_species), n=n())
+  summarise(mean_diversity_bird_species = mean(diversity_bird_species), 
+            mean_diversity_mammal_species = mean(diversity_mammal_species), 
+            n=n())
 ```
 
 
@@ -134,7 +138,8 @@ vertebrates %>%
 vertebrates %>% 
   filter(xor(distance <=3, distance >= 25)) %>% 
   group_by(distance) %>% 
-  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), mean, na.rm=T))
+  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), 
+                   mean, na.rm=T))
 ```
 
 12. (4 points) Based on your interest, do one exploratory analysis on the `vertebrate` data of your choice. This analysis needs to include a minimum of two functions in `dplyr.`
@@ -142,6 +147,7 @@ vertebrates %>%
 vertebrates %>% 
   filter(xor(num_households <= 20, num_households >= 50)) %>% 
   group_by(num_households) %>% 
-  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), mean, na.rm=T))
+  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), 
+                   mean, na.rm=T))
 ```
 

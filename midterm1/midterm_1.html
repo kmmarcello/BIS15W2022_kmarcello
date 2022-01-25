@@ -381,7 +381,9 @@ class(elephants$sex)</code></pre>
 <pre class="r"><code>elephants %&gt;% 
   group_by(sex) %&gt;% 
   filter(age &gt; &quot;20&quot;) %&gt;% 
-  summarise(mean_height = mean(height), min_height = min(height), max_height =max(height), n=n())</code></pre>
+  summarise(mean_height = mean(height), min_height = min(height), 
+            max_height =max(height), 
+            n=n())</code></pre>
 <pre><code>## # A tibble: 2 × 5
 ##   sex   mean_height min_height max_height     n
 ##   &lt;fct&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
@@ -505,7 +507,9 @@ class(vertebrates$LandUse)</code></pre>
 <pre class="r"><code>vertebrates %&gt;% 
   group_by(hunt_cat) %&gt;%  
   filter(hunt_cat != &quot;None&quot;) %&gt;% 
-  summarise(mean_diversity_bird_species = mean(diversity_bird_species), mean_diversity_mammal_species = mean(diversity_mammal_species), n=n())</code></pre>
+  summarise(mean_diversity_bird_species = mean(diversity_bird_species), 
+            mean_diversity_mammal_species = mean(diversity_mammal_species), 
+            n=n())</code></pre>
 <pre><code>## # A tibble: 2 × 4
 ##   hunt_cat mean_diversity_bird_species mean_diversity_mammal_species     n
 ##   &lt;fct&gt;                          &lt;dbl&gt;                         &lt;dbl&gt; &lt;int&gt;
@@ -517,7 +521,8 @@ class(vertebrates$LandUse)</code></pre>
 <pre class="r"><code>vertebrates %&gt;% 
   filter(xor(distance &lt;=3, distance &gt;= 25)) %&gt;% 
   group_by(distance) %&gt;% 
-  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), mean, na.rm=T))</code></pre>
+  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), 
+                   mean, na.rm=T))</code></pre>
 <pre><code>## # A tibble: 3 × 7
 ##   distance ra_apes ra_birds ra_elephant ra_monkeys ra_rodent ra_ungulate
 ##      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
@@ -530,7 +535,8 @@ class(vertebrates$LandUse)</code></pre>
 <pre class="r"><code>vertebrates %&gt;% 
   filter(xor(num_households &lt;= 20, num_households &gt;= 50)) %&gt;% 
   group_by(num_households) %&gt;% 
-  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), mean, na.rm=T))</code></pre>
+  summarise(across(c(ra_apes, ra_birds, ra_elephant, ra_monkeys, ra_rodent, ra_ungulate), 
+                   mean, na.rm=T))</code></pre>
 <pre><code>## # A tibble: 6 × 7
 ##   num_households ra_apes ra_birds ra_elephant ra_monkeys ra_rodent ra_ungulate
 ##            &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;

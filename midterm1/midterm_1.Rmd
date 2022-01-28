@@ -64,12 +64,12 @@ class(elephants$sex)
 names(elephants)
 ```
 
-5. (2 points) How many male and female elephants are represented in the data?
+5. (2 points) How many male and female elephants are represented in the data? 
 ```{r}
 tabyl(elephants, sex)
 ```
 
-6. (2 points) What is the average age all elephants in the data?
+6. (2 points) What is the average age all elephants in the data? 
 ```{r}
 elephants %>% 
   summarise(mean_age = mean(age))

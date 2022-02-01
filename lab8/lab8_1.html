@@ -293,7 +293,7 @@ div.tocify {
 ##     chisq.test, fisher.test</code></pre>
 <pre class="r"><code>library(skimr)</code></pre>
 <pre class="r"><code>#install.packages(&quot;here&quot;)
-library(here)</code></pre>
+library(&quot;here&quot;)</code></pre>
 <pre><code>## here() starts at /Users/kaylahmarcello/Desktop/BIS15W2022_kmarcello</code></pre>
 </div>
 <div id="tidy-data" class="section level2">
@@ -334,8 +334,25 @@ library(here)</code></pre>
 ## 4 Trapper     60    58    64    58
 ## 5 Radar       74    72    78    70
 ## 6 Henry       88    87    88    72</code></pre>
-<p>Want to try the <code>here</code> package? does not work</p>
-<pre class="r"><code>#read_csv(here(&quot;data&quot;, &quot;heartrate.csv&quot;))</code></pre>
+<p>Want to try the <code>here</code> package? does not work, I think I hate here; needed to restart R &gt; top &gt; session &gt; restart R &gt; now reload tidyverse and here</p>
+<pre class="r"><code>read_csv(here(&quot;lab8&quot;, &quot;data&quot;, &quot;heartrate.csv&quot;))</code></pre>
+<pre><code>## Rows: 6 Columns: 5</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): patient
+## dbl (4): a, b, c, d</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 6 × 5
+##   patient      a     b     c     d
+##   &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Margaret    72    74    80    68
+## 2 Frank       84    84    88    76
+## 3 Hawkeye     64    66    68    64
+## 4 Trapper     60    58    64    58
+## 5 Radar       74    72    78    70
+## 6 Henry       88    87    88    72</code></pre>
 <p>Let’s assess whether or not these data are tidy.<br />
 (1) each variable has its own column<br />
 <em>No. Some of the column names are actually variables (treatment a, b, c, or d).</em><br />
@@ -410,21 +427,21 @@ the columns are data points, each observation is grouped by row.</p></li>
 <pre class="r"><code>relig_income %&gt;% 
   pivot_longer(-religion, #patient does not pivot
                names_to = &quot;income&quot;, 
-               values_to = &quot;people&quot;
+               values_to = &quot;households&quot;
                )</code></pre>
 <pre><code>## # A tibble: 180 × 3
-##    religion income             people
-##    &lt;chr&gt;    &lt;chr&gt;               &lt;dbl&gt;
-##  1 Agnostic &lt;$10k                  27
-##  2 Agnostic $10-20k                34
-##  3 Agnostic $20-30k                60
-##  4 Agnostic $30-40k                81
-##  5 Agnostic $40-50k                76
-##  6 Agnostic $50-75k               137
-##  7 Agnostic $75-100k              122
-##  8 Agnostic $100-150k             109
-##  9 Agnostic &gt;150k                  84
-## 10 Agnostic Don&#39;t know/refused     96
+##    religion income             households
+##    &lt;chr&gt;    &lt;chr&gt;                   &lt;dbl&gt;
+##  1 Agnostic &lt;$10k                      27
+##  2 Agnostic $10-20k                    34
+##  3 Agnostic $20-30k                    60
+##  4 Agnostic $30-40k                    81
+##  5 Agnostic $40-50k                    76
+##  6 Agnostic $50-75k                   137
+##  7 Agnostic $75-100k                  122
+##  8 Agnostic $100-150k                 109
+##  9 Agnostic &gt;150k                      84
+## 10 Agnostic Don&#39;t know/refused         96
 ## # … with 170 more rows</code></pre>
 </div>
 <div id="example-2-some-column-names-are-data" class="section level2">
@@ -562,6 +579,26 @@ billboard3</code></pre>
 days are data points, rows are grouped together.</p></li>
 <li><p>Use <code>pivot_longer()</code> to make the data tidy. Focus the data only on genotype, day, and measurement.</p></li>
 </ol>
+<pre class="r"><code>plant_data %&gt;% 
+  pivot_longer(-c(genotype, water_sched_prog, greenhouse),
+               names_to = &quot;days&quot;,
+               values_to = &quot;measurment&quot;,
+               values_drop_na = TRUE
+               )</code></pre>
+<pre><code>## # A tibble: 90 × 5
+##    genotype water_sched_prog greenhouse days  measurment
+##    &lt;chr&gt;    &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt;
+##  1 control  A                A761       day1        21.7
+##  2 control  A                A761       day2        19.9
+##  3 control  A                A761       day3        20.7
+##  4 control  A                A761       day4        19.4
+##  5 control  A                A761       day5        20.2
+##  6 control  A                A761       day6        19.2
+##  7 control  A                A761       day7        20.6
+##  8 control  A                A761       day8        19.9
+##  9 control  A                A761       day9        19.2
+## 10 control  A                A761       day10       20.4
+## # … with 80 more rows</code></pre>
 <pre class="r"><code>plant_data1 &lt;- 
   plant_data %&gt;% 
   pivot_longer(

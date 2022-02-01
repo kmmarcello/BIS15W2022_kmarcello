@@ -44,7 +44,7 @@ library(skimr)
 
 ```{r}
 #install.packages("here")
-library(here)
+library("here")
 ```
 
 ## Tidy data
@@ -74,9 +74,9 @@ heartrate <- readr::read_csv("data/heartrate.csv")
 heartrate
 ```
 
-Want to try the `here` package? does not work
+Want to try the `here` package? does not work, I think I hate here; needed to restart R > top > session > restart R > now reload tidyverse and here
 ```{r}
-#read_csv(here("data", "heartrate.csv"))
+read_csv(here("lab8", "data", "heartrate.csv"))
 ```
 
 Let's assess whether or not these data are tidy.  
@@ -111,7 +111,7 @@ the columns are data points, each observation is grouped by row.
 relig_income %>% 
   pivot_longer(-religion, #patient does not pivot
                names_to = "income", 
-               values_to = "people"
+               values_to = "households"
                )
 ```
 
@@ -167,7 +167,16 @@ plant_data
 2. Why are these data not tidy?  
 days are data points, rows are grouped together.
 
-3. Use `pivot_longer()` to make the data tidy. Focus the data only on genotype, day, and measurement.  
+3. Use `pivot_longer()` to make the data tidy. Focus the data only on genotype, day, and measurement. 
+```{r}
+plant_data %>% 
+  pivot_longer(-c(genotype, water_sched_prog, greenhouse),
+               names_to = "days",
+               values_to = "measurment",
+               values_drop_na = TRUE
+               )
+```
+
 ```{r}
 plant_data1 <- 
   plant_data %>% 

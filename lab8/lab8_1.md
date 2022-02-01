@@ -86,7 +86,7 @@ library(skimr)
 
 ```r
 #install.packages("here")
-library(here)
+library("here")
 ```
 
 ```
@@ -153,10 +153,39 @@ heartrate
 ## 6 Henry       88    87    88    72
 ```
 
-Want to try the `here` package? does not work
+Want to try the `here` package? does not work, I think I hate here; needed to restart R > top > session > restart R > now reload tidyverse and here
 
 ```r
-#read_csv(here("data", "heartrate.csv"))
+read_csv(here("lab8", "data", "heartrate.csv"))
+```
+
+```
+## Rows: 6 Columns: 5
+```
+
+```
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): patient
+## dbl (4): a, b, c, d
+```
+
+```
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```
+## # A tibble: 6 × 5
+##   patient      a     b     c     d
+##   <chr>    <dbl> <dbl> <dbl> <dbl>
+## 1 Margaret    72    74    80    68
+## 2 Frank       84    84    88    76
+## 3 Hawkeye     64    66    68    64
+## 4 Trapper     60    58    64    58
+## 5 Radar       74    72    78    70
+## 6 Henry       88    87    88    72
 ```
 
 Let's assess whether or not these data are tidy.  
@@ -257,24 +286,24 @@ the columns are data points, each observation is grouped by row.
 relig_income %>% 
   pivot_longer(-religion, #patient does not pivot
                names_to = "income", 
-               values_to = "people"
+               values_to = "households"
                )
 ```
 
 ```
 ## # A tibble: 180 × 3
-##    religion income             people
-##    <chr>    <chr>               <dbl>
-##  1 Agnostic <$10k                  27
-##  2 Agnostic $10-20k                34
-##  3 Agnostic $20-30k                60
-##  4 Agnostic $30-40k                81
-##  5 Agnostic $40-50k                76
-##  6 Agnostic $50-75k               137
-##  7 Agnostic $75-100k              122
-##  8 Agnostic $100-150k             109
-##  9 Agnostic >150k                  84
-## 10 Agnostic Don't know/refused     96
+##    religion income             households
+##    <chr>    <chr>                   <dbl>
+##  1 Agnostic <$10k                      27
+##  2 Agnostic $10-20k                    34
+##  3 Agnostic $20-30k                    60
+##  4 Agnostic $30-40k                    81
+##  5 Agnostic $40-50k                    76
+##  6 Agnostic $50-75k                   137
+##  7 Agnostic $75-100k                  122
+##  8 Agnostic $100-150k                 109
+##  9 Agnostic >150k                      84
+## 10 Agnostic Don't know/refused         96
 ## # … with 170 more rows
 ```
 
@@ -465,7 +494,34 @@ plant_data
 2. Why are these data not tidy?  
 days are data points, rows are grouped together.
 
-3. Use `pivot_longer()` to make the data tidy. Focus the data only on genotype, day, and measurement.  
+3. Use `pivot_longer()` to make the data tidy. Focus the data only on genotype, day, and measurement. 
+
+```r
+plant_data %>% 
+  pivot_longer(-c(genotype, water_sched_prog, greenhouse),
+               names_to = "days",
+               values_to = "measurment",
+               values_drop_na = TRUE
+               )
+```
+
+```
+## # A tibble: 90 × 5
+##    genotype water_sched_prog greenhouse days  measurment
+##    <chr>    <chr>            <chr>      <chr>      <dbl>
+##  1 control  A                A761       day1        21.7
+##  2 control  A                A761       day2        19.9
+##  3 control  A                A761       day3        20.7
+##  4 control  A                A761       day4        19.4
+##  5 control  A                A761       day5        20.2
+##  6 control  A                A761       day6        19.2
+##  7 control  A                A761       day7        20.6
+##  8 control  A                A761       day8        19.9
+##  9 control  A                A761       day9        19.2
+## 10 control  A                A761       day10       20.4
+## # … with 80 more rows
+```
+
 
 ```r
 plant_data1 <- 

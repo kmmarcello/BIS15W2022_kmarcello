@@ -153,7 +153,7 @@ heartrate
 ## 6 Henry       88    87    88    72
 ```
 
-Want to try the `here` package?
+Want to try the `here` package? does not work
 
 ```r
 #read_csv(here("data", "heartrate.csv"))
@@ -249,7 +249,7 @@ relig_income
 ```
 
 2. Why are these data untidy?  
-
+the columns are data points, each observation is grouped by row.
 
 3. Use `pivot_longer()` to make the data tidy.  
 
@@ -463,35 +463,36 @@ plant_data
 ```
 
 2. Why are these data not tidy?  
-
+days are data points, rows are grouped together.
 
 3. Use `pivot_longer()` to make the data tidy. Focus the data only on genotype, day, and measurement.  
 
 ```r
 plant_data1 <- 
   plant_data %>% 
-  pivot_longer(-c(genotype, water_sched_prog, greenhouse), #specific columns
-               names_to = "days",
-               values_to = "growth",
-               values_drop_na = TRUE
-               )
+  pivot_longer(
+   cols = starts_with("day"),
+   names_to = "days",
+   names_prefix = "day",
+   values_to = "measurment",
+   values_drop_na = TRUE)
 plant_data1
 ```
 
 ```
 ## # A tibble: 90 × 5
-##    genotype water_sched_prog greenhouse days  growth
-##    <chr>    <chr>            <chr>      <chr>  <dbl>
-##  1 control  A                A761       day1    21.7
-##  2 control  A                A761       day2    19.9
-##  3 control  A                A761       day3    20.7
-##  4 control  A                A761       day4    19.4
-##  5 control  A                A761       day5    20.2
-##  6 control  A                A761       day6    19.2
-##  7 control  A                A761       day7    20.6
-##  8 control  A                A761       day8    19.9
-##  9 control  A                A761       day9    19.2
-## 10 control  A                A761       day10   20.4
+##    genotype water_sched_prog greenhouse days  measurment
+##    <chr>    <chr>            <chr>      <chr>      <dbl>
+##  1 control  A                A761       1           21.7
+##  2 control  A                A761       2           19.9
+##  3 control  A                A761       3           20.7
+##  4 control  A                A761       4           19.4
+##  5 control  A                A761       5           20.2
+##  6 control  A                A761       6           19.2
+##  7 control  A                A761       7           20.6
+##  8 control  A                A761       8           19.9
+##  9 control  A                A761       9           19.2
+## 10 control  A                A761       10          20.4
 ## # … with 80 more rows
 ```
 

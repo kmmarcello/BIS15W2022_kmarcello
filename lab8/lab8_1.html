@@ -334,7 +334,7 @@ library(here)</code></pre>
 ## 4 Trapper     60    58    64    58
 ## 5 Radar       74    72    78    70
 ## 6 Henry       88    87    88    72</code></pre>
-<p>Want to try the <code>here</code> package?</p>
+<p>Want to try the <code>here</code> package? does not work</p>
 <pre class="r"><code>#read_csv(here(&quot;data&quot;, &quot;heartrate.csv&quot;))</code></pre>
 <p>Let’s assess whether or not these data are tidy.<br />
 (1) each variable has its own column<br />
@@ -403,7 +403,8 @@ library(here)</code></pre>
 ## # … with 3 more variables: $100-150k &lt;dbl&gt;, &gt;150k &lt;dbl&gt;,
 ## #   Don&#39;t know/refused &lt;dbl&gt;</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Why are these data untidy?</p></li>
+<li><p>Why are these data untidy?<br />
+the columns are data points, each observation is grouped by row.</p></li>
 <li><p>Use <code>pivot_longer()</code> to make the data tidy.</p></li>
 </ol>
 <pre class="r"><code>relig_income %&gt;% 
@@ -557,30 +558,32 @@ billboard3</code></pre>
 ## #   day22 &lt;dbl&gt;, day23 &lt;dbl&gt;, day24 &lt;dbl&gt;, day25 &lt;dbl&gt;, day26 &lt;dbl&gt;,
 ## #   day27 &lt;dbl&gt;, day28 &lt;dbl&gt;, day29 &lt;dbl&gt;, day30 &lt;dbl&gt;</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Why are these data not tidy?</p></li>
+<li><p>Why are these data not tidy?<br />
+days are data points, rows are grouped together.</p></li>
 <li><p>Use <code>pivot_longer()</code> to make the data tidy. Focus the data only on genotype, day, and measurement.</p></li>
 </ol>
 <pre class="r"><code>plant_data1 &lt;- 
   plant_data %&gt;% 
-  pivot_longer(-c(genotype, water_sched_prog, greenhouse), #specific columns
-               names_to = &quot;days&quot;,
-               values_to = &quot;growth&quot;,
-               values_drop_na = TRUE
-               )
+  pivot_longer(
+   cols = starts_with(&quot;day&quot;),
+   names_to = &quot;days&quot;,
+   names_prefix = &quot;day&quot;,
+   values_to = &quot;measurment&quot;,
+   values_drop_na = TRUE)
 plant_data1</code></pre>
 <pre><code>## # A tibble: 90 × 5
-##    genotype water_sched_prog greenhouse days  growth
-##    &lt;chr&gt;    &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;  &lt;dbl&gt;
-##  1 control  A                A761       day1    21.7
-##  2 control  A                A761       day2    19.9
-##  3 control  A                A761       day3    20.7
-##  4 control  A                A761       day4    19.4
-##  5 control  A                A761       day5    20.2
-##  6 control  A                A761       day6    19.2
-##  7 control  A                A761       day7    20.6
-##  8 control  A                A761       day8    19.9
-##  9 control  A                A761       day9    19.2
-## 10 control  A                A761       day10   20.4
+##    genotype water_sched_prog greenhouse days  measurment
+##    &lt;chr&gt;    &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt;
+##  1 control  A                A761       1           21.7
+##  2 control  A                A761       2           19.9
+##  3 control  A                A761       3           20.7
+##  4 control  A                A761       4           19.4
+##  5 control  A                A761       5           20.2
+##  6 control  A                A761       6           19.2
+##  7 control  A                A761       7           20.6
+##  8 control  A                A761       8           19.9
+##  9 control  A                A761       9           19.2
+## 10 control  A                A761       10          20.4
 ## # … with 80 more rows</code></pre>
 </div>
 <div id="example-3-more-than-one-variable-in-a-column-name" class="section level2">

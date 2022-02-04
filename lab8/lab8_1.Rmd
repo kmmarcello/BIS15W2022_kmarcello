@@ -74,6 +74,10 @@ heartrate <- readr::read_csv("data/heartrate.csv")
 heartrate
 ```
 
+
+
+
+
 Want to try the `here` package? does not work, I think I hate here; needed to restart R > top > session > restart R > now reload tidyverse and here
 ```{r}
 read_csv(here("lab8", "data", "heartrate.csv"))
@@ -95,7 +99,16 @@ heartrate %>%
                values_to = "heartrate"
                )
 ```
+```{r}
+mean(heartrate$a)
+```
 
+```{r}
+#heartrate_long <- heartrate %>% 
+  #group_by(drug) %>% 
+  #summarise(mean = mean(heartrate))
+
+```
 ## Practice
 1. Import the file `relig_income.csv` and store it as a new object `relig_income`.  "here" does not work 
 ```{r}

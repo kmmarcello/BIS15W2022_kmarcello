@@ -50,7 +50,7 @@ Here we add a new column of expenditure types, which are stored as rownames abov
 ```{r}
 expenditures <- 
   USPersonalExpenditure %>% 
-  as_tibble() %>% 
+  as_tibble() %>% #makes the data into a dataframe
   mutate(expenditure = rownames(USPersonalExpenditure))
 expenditures
 ```
@@ -58,12 +58,19 @@ expenditures
 ## Practice
 1. Are these data tidy? Please use `pivot_longer()` to tidy the data.
 ```{r}
-
+expenditures_long <- expenditures %>% 
+  pivot_longer(-expenditure, #patient does not pivot
+               names_to = "year", 
+               values_to = "bn_dollars"
+               )
+expenditures_long
 ```
 
 2. Restrict the data to medical and health expenditures only. Sort in ascending order.
 ```{r}
-
+expenditures_long %>% 
+  filter(expenditure == "Medical and Health") %>% 
+  arrange(bn_dollars)
 ```
 
 ## `separate()`
@@ -78,16 +85,33 @@ We need to start by separating the patient names from their sexes. `separate()` 
 heartrate2 %>% 
   separate(patient, into= c("patient", "sex"), sep = "_")
 ```
+```{r}
+names(heartrate2)
+```
 
 ## Practice
 1. Re-examine `heartrate2`. Use `separate()` for the sexes, `pivot_longer()` to tidy, and `arrange()` to organize by patient and drug. Store this as a new object `heartrate3`.  
 ```{r}
-
+heartrate_long <- heartrate2 %>% 
+  separate(patient, into= c("patient", "sex"), sep = "_") %>% 
+  pivot_longer(-c(patient, sex), #patient and sex do not pivot
+               names_to = "drug", 
+               values_to = "numbner"
+               ) %>%
+  arrange(patient, numbner)
+heartrate_long
+```
+```{r}
+names(heartrate_long)
 ```
 
 2. `unite()` is the opposite of separate(). Its syntax is straightforward. You only need to give a new column name and then list the columns to combine with a separation character.  Give it a try below by recombining patient and sex from `heartrate3`.  
 ```{r}
-
+heartrate_long %>% 
+  unite(patient_sex, "patient", "sex", sep ="_")
+```
+```{r}
+names(heartrate_long)
 ```
 
 ## `pivot_wider()`
@@ -142,17 +166,26 @@ For the last practice example, I will use data from the awesome [R Ladies Sydney
 
 1. Load the beachbugs data and have a look.
 ```{r}
-
+beachbugs<- readr::read_csv("data/beachbugs_long.csv")
+beachbugs
 ```
 
 2. Use `pivot_wider` to transform the data into wide format.
 ```{r}
-
+beachbugs_wide <- beachbugs %>% 
+  pivot_wider(names_from = "site",
+              values_from = "buglevels")
+beachbugs_wide
 ```
 
 3. Now, use `pivot_longer` to transform them back to long!
 ```{r}
-
+beachbugs_long <- beachbugs_wide %>% 
+  pivot_longer(-year, 
+               names_to = "site", 
+               values_to = "buglevels"
+               )
+beachbugs_long
 ```
 
 ## Wrap-up  

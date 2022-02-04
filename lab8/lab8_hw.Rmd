@@ -36,7 +36,8 @@ This homework loosely follows the tutorial of [R Ladies Sydney](https://rladiess
 
 1. Start by loading the data `sydneybeaches`. Do some exploratory analysis to get an idea of the data structure.
 ```{r}
-
+sydneybeaches <- readr::read_csv("data/sydneybeaches.csv")
+sydneybeaches
 ```
 
 If you want to try `here`, first notice the output when you load the `here` library. It gives you information on the current working directory. You can then use it to easily and intuitively load files.
@@ -47,13 +48,36 @@ library(here)
 The quotes show the folder structure from the root directory.
 ```{r}
 sydneybeaches <-read_csv(here("lab8", "data", "sydneybeaches.csv")) %>% janitor::clean_names()
+sydneybeaches
 ```
 
-2. Are these data "tidy" per the definitions of the tidyverse? How do you know? Are they in wide or long format?
+```{r}
+names(sydneybeaches)
+```
 
+
+2. Are these data "tidy" per the definitions of the tidyverse? How do you know? Are they in wide or long format?
+they look like they are in wide format and not tidy.
 
 3. We are only interested in the variables site, date, and enterococci_cfu_100ml. Make a new object focused on these variables only. Name the object `sydneybeaches_long`
 
+```{r}
+sydneybeaches_long <- sydneybeaches %>% 
+  pivot_longer(-date,
+              names_to = "site", 
+              values_to = "enterococci_cfu_100ml"
+               )
+sydneybeaches_long
+
+```
+```{r}
+sydneybeaches_long <- sydneybeaches %>% 
+  pivot_longer(-date, 
+               names_to = "site", 
+               values_to = "enterococci_cfu_100ml"
+               )
+sydneybeaches_long
+```
 
 4. Pivot the data such that the dates are column names and each beach only appears once. Name the object `sydneybeaches_wide`
 
@@ -65,6 +89,9 @@ sydneybeaches <-read_csv(here("lab8", "data", "sydneybeaches.csv")) %>% janitor:
 
 
 7. What is the average `enterococci_cfu_100ml` by year for each beach. Think about which data you will use- long or wide.
+```{r}
+#mean_entero <- 
+```
 
 
 8. Make the output from question 7 easier to read by pivoting it to wide format.

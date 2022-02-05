@@ -93,6 +93,11 @@ Let's assess whether or not these data are tidy.
 
 To fix this problem, we need to reshape the table to long format while keeping track of column names and values. We do this using `pivot_longer()`. Notice that the dimensions of the data frame change.  
 ```{r}
+head(heartrate)
+```
+
+
+```{r}
 heartrate %>% 
   pivot_longer(-patient, #patient does not pivot
                names_to = "drug", 

@@ -60,45 +60,64 @@ names(sydneybeaches)
 they look like they are in wide format and not tidy.
 
 3. We are only interested in the variables site, date, and enterococci_cfu_100ml. Make a new object focused on these variables only. Name the object `sydneybeaches_long`
-
+(notes: You started doing to much in this section, focus on making a new dataframe first that only focuses on these columns. You are trying to make the dataframe long by pulling out these columns TRICKY!!)
 ```{r}
 sydneybeaches_long <- sydneybeaches %>% 
-  pivot_longer(-date,
-              names_to = "site", 
-              values_to = "enterococci_cfu_100ml"
-               )
-sydneybeaches_long
-
-```
-```{r}
-sydneybeaches_long <- sydneybeaches %>% 
-  pivot_longer(-date, 
-               names_to = "site", 
-               values_to = "enterococci_cfu_100ml"
-               )
+  select(site, date, enterococci_cfu_100ml)
 sydneybeaches_long
 ```
 
 4. Pivot the data such that the dates are column names and each beach only appears once. Name the object `sydneybeaches_wide`
-
+(notes: use pivot_wider)
+```{r}
+sydneybeaches_wide <- sydneybeaches_long %>% 
+  pivot_wider(names_from = "date",
+              values_from = "enterococci_cfu_100ml")
+sydneybeaches_wide
+```
 
 5. Pivot the data back so that the dates are data and not column names.
+```{r}
+sydneybeaches_long_again <- sydneybeaches_wide %>% 
+  pivot_longer(-site,
+               names_to = "date",
+               values_to = "enterococci_cfu_100ml")
+sydneybeaches_long_again
+```
 
-
-6. We haven't dealt much with dates yet, but separate the date into columns day, month, and year. Do this on the `sydneybeaches_long` data.
-
+6. We haven't dealt much with dates yet, but separate the date into columns day, month, and year. Do this on the `sydneybeaches_long` data. (notes: from 8.1 separate())
+```{r}
+sydney_dates <- sydneybeaches_long %>% 
+  separate(date, into = c("day", "month", "year"), sep = "/")
+sydney_dates
+```
 
 7. What is the average `enterococci_cfu_100ml` by year for each beach. Think about which data you will use- long or wide.
 ```{r}
-#mean_entero <- 
+sydney_dates %>% 
+  group_by(site, year) %>% 
+  summarise(mean_enterococci_cfu_100ml = mean(enterococci_cfu_100ml, na.rm = T))
 ```
 
-
 8. Make the output from question 7 easier to read by pivoting it to wide format.
-
+```{r}
+mean_entero <- sydney_dates %>% 
+  group_by(site, year) %>% 
+  summarise(mean_enterococci_cfu_100ml = mean(enterococci_cfu_100ml, na.rm = T)) %>% 
+  pivot_wider(names_from = "site",
+              values_from = "mean_enterococci_cfu_100ml")
+mean_entero
+```
 
 9. What was the most polluted beach in 2018?
-
+```{r}
+mean_entero %>% 
+  filter(year == "2018") %>% 
+  pivot_longer(-year,
+               names_to = "site",
+               values_to = "mean_enterococci_cfu_100ml") %>% 
+  arrange(desc(mean_enterococci_cfu_100ml))
+```
 
 10. Please complete the class project survey at: [BIS 15L Group Project](https://forms.gle/H2j69Z3ZtbLH3efW6)
 

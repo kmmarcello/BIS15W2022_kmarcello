@@ -33,6 +33,9 @@ colleges <- readr::read_csv("data/ca_college_data.csv")
 ```{r}
 names(colleges)
 ```
+```{r}
+clean_names(colleges)
+```
 
 The variables are a bit hard to decipher, here is a key:  
 
@@ -136,7 +139,7 @@ head(colleges)
 
 ```{r}
 uc_institutions <- colleges %>% 
-  filter_all(any_vars(str_detect(., pattern = "University of California")))
+  filter_all(any_vars(str_detect(., pattern = "University of California"))) #stolen from help
 uc_institutions
 ```
 
@@ -158,7 +161,7 @@ univ_calif_final
 ```{r}
 highest_adm <- univ_calif_final %>% 
   select(campus, ADM_RATE) %>% 
-  arrange(desc(ADM_RATE))
+  arrange(ADM_RATE)
 highest_adm
 ```
 ```{r}

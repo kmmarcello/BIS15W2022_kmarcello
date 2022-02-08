@@ -49,7 +49,9 @@ life_history %>%
 
 ```{r}
 life_history %>% 
-  ggplot(aes(x=order)) + geom_bar()+coord_flip()
+  ggplot(aes(x=order)) + 
+  geom_bar()+
+  coord_flip() 
 ```
 
 ```{r}
@@ -66,14 +68,29 @@ options(scipen=999) #cancels scientific notation for the session
 life_history %>% 
   group_by(order) %>% 
   summarize(mean_mass=mean(mass, na.rm=T)) %>% 
-  ggplot(aes(x=order, y=mean_mass))+geom_col()
+  ggplot(aes(x=order, y=mean_mass))+geom_col() 
 ```
 
 ```{r}
 life_history %>% 
   group_by(order) %>% 
   summarize(mean_mass=mean(mass, na.rm=T)) %>% 
-  ggplot(aes(x=order, y=mean_mass))+geom_col()+coord_flip()+scale_y_log10()
+  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+geom_col()
+```
+
+```{r}
+life_history %>% 
+  group_by(order) %>% 
+  summarize(mean_mass=mean(mass, na.rm=T)) %>% 
+  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+geom_col() +
+  scale_y_log10()
+```
+
+```{r}
+life_history %>% 
+  group_by(order) %>% 
+  summarize(mean_mass=mean(mass, na.rm=T)) %>% 
+  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+geom_col()+coord_flip()+scale_y_log10()
 ```
 
 ## Scatterplots
@@ -91,13 +108,21 @@ glimpse(life_history)
 
 ```{r}
 life_history %>% 
-  ggplot(aes(x=order, y=mass))+geom_boxplot()+scale_y_log10()+coord_flip()
+  ggplot(aes(x=order, y=mass))+
+  geom_boxplot()+
+  scale_y_log10()+ # this is a very important step
+  coord_flip()
 ```
 
 Remember, you can always use dplyr functions to focus your question, summarize, etc.
 ```{r}
 life_history %>% 
   filter(order=="Primates") %>% 
+  ggplot(aes(x=family, y=mass))+geom_boxplot(na.rm=T)+scale_y_log10()+coord_flip()
+```
+```{r}
+life_history %>% 
+  filter(order=="Rodentia") %>% 
   ggplot(aes(x=family, y=mass))+geom_boxplot(na.rm=T)+scale_y_log10()+coord_flip()
 ```
 
@@ -133,7 +158,8 @@ elephants %>%
 elephants %>% 
   #group_by(sex) %>% 
   #summarise(mean_age = mean(age), mean_height = mean(height), n=n()) %>% 
-  ggplot(aes(x=age, y=height))+geom_point(alpha = 0.5, col = "cornflowerblue", size = 0.5)
+  ggplot(aes(x=age, y=height))+
+  geom_point(alpha = 0.5, col = "blue", size = 0.5)
 ```
 
 ## Aesthetics: Labels
@@ -142,13 +168,17 @@ Now that we have practiced scatter plots, bar plots, and box plots we need to le
 In the example above we looked at age and height of elephants.
 ```{r}
 elephants %>% 
-  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F)
+  ggplot(aes(x=age, y=height)) + 
+  geom_point() + 
+  geom_smooth(method=lm, se=F)
 ```
 
 The plot looks clean, but it is incomplete. A reader unfamiliar with the data might have a difficult time interpreting the labels. To add custom labels, we use the `labs` command.
 ```{r}
 elephants %>% 
-  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F)+ #making a best fit line.
+  ggplot(aes(x=age, y=height)) + 
+  geom_point() + 
+  geom_smooth(method=lm, se=F)+ #making a best fit line. We dont really need this here.
   labs(title="Elephant Age vs. Height", #adding labels
        x="Age",
        y="Height (cm)")
@@ -158,9 +188,9 @@ We can improve the plot further by adjusting the size and face of the text. We d
 ```{r}
 elephants %>% 
   ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F) +
-  labs(title = "Elephant Age vs. Height",
+  labs(title = "Elephant Age vs. Height", # labs = labels
        x = "Age",
-       y = "Height") +
+       y = "Height (cm)") +
   theme(plot.title = element_text(size = 12, face = "bold"),
         axis.text = element_text(size = 10),
         axis.title = element_text(size = 10))
@@ -173,7 +203,7 @@ elephants %>%
   labs(title = "Elephant Age vs. Height",
        x = "Age",
        y = "Height (cm)") +
-  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5))
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5)) # rel = relative size
 ```
 
 ## Other Aesthetics
@@ -226,7 +256,7 @@ homerange %>%
   geom_point(na.rm=T) +
   labs(title = "Homerange vs. Mass",
        x = "Homerange",
-       y = "log10(mass)") +
+       y = "log10.mass") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5))
 ```
 

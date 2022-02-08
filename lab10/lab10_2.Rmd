@@ -58,6 +58,7 @@ There are many options to create nice plots in ggplot. One useful trick is to st
 ```{r}
 p <- homerange %>% 
   ggplot(aes(x= log10.mass, y= log10.hra))
+p
 ```
 
 Play with point size.
@@ -132,11 +133,28 @@ For this practice, let's use the [palmerpenguins](https://allisonhorst.github.io
 
 1. Make a bar plot that shows counts of individuals by island. Fill by species, and try both a stacked bar plot and `position="dodge"`.
 ```{r}
-
+palmerpenguins::penguins
+```
+```{r}
+names()
 ```
 
 ```{r}
+ %>% 
+  ggplot(aes(x = taxon, fill = species)) + geom_bar() +
+  coord_flip() +
+  labs(title = "Observations by Taxon in Homerange Data",
+       x = "Taxonomic Group",
+       fill = "Trophic Guild")
+```
 
+```{r}
+homerange %>% 
+  ggplot(aes(x = taxon, fill = trophic.guild)) + geom_bar(position = "dodge") +
+  coord_flip() +
+  labs(title = "Observations by Taxon in Homerange Data",
+       x = "Taxonomic Group",
+       fill = "Trophic Guild")
 ```
 
 2. What are the number of individuals separated by sex on each island?

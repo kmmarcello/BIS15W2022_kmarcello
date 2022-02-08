@@ -1,10 +1,11 @@
 ---
 title: "Data Visualization: `ggplot` part 2"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
     toc: yes
     toc_float: yes
+    keep_md: yes
   pdf_document:
     toc: yes
 ---
@@ -109,17 +110,31 @@ elephants <- read_csv(here("lab10", "data", "ElephantsMF.csv")) %>% clean_names(
 
 1. On midterm 1, I asked how many male and female elephants were represented in the data. How would you make a plot of this?
 ```{r}
+names(elephants)
+```
 
+```{r}
+sex_elephants <- elephants %>% 
+  count(sex) %>% 
+  arrange(sex) %>% 
+  ggplot(aes(x=sex, y=n))+geom_col()
+sex_elephants
 ```
 
 2. How does the age of elephants compare by sex?
 ```{r}
-
+elephants %>% 
+  group_by(sex) %>% 
+  summarise(mean_age = mean(age), n=n()) %>% 
+  ggplot(aes(x=sex, y=mean_age))+geom_col()
 ```
 
 3. What is the relationship between age and height?
 ```{r}
-
+elephants %>% 
+  #group_by(sex) %>% 
+  #summarise(mean_age = mean(age), mean_height = mean(height), n=n()) %>% 
+  ggplot(aes(x=age, y=height))+geom_point()
 ```
 
 ## Aesthetics: Labels
@@ -134,8 +149,8 @@ elephants %>%
 The plot looks clean, but it is incomplete. A reader unfamiliar with the data might have a difficult time interpreting the labels. To add custom labels, we use the `labs` command.
 ```{r}
 elephants %>% 
-  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F)+
-  labs(title="Elephant Age vs. Height",
+  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F)+ #making a best fit line.
+  labs(title="Elephant Age vs. Height", #adding labels
        x="Age",
        y="Height (cm)")
 ```
@@ -158,7 +173,7 @@ elephants %>%
   ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F) +
   labs(title = "Elephant Age vs. Height",
        x = "Age",
-       y = "Height") +
+       y = "Height (cm)") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5))
 ```
 
@@ -197,12 +212,23 @@ names(homerange)
 
 1. Make a barplot that shows counts of ectotherms and endotherms. Label the axes, provide a title, and fill by `thermoregulation`.
 ```{r}
-
+homerange %>% 
+  ggplot(aes(x=thermoregulation, fill=thermoregulation))+geom_bar()+
+  labs(title = "# of ecto- and endo-therms",
+       x = "thermoregulation",
+       y = NULL) +
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5))
 ```
 
 2. Make a scatterplot that compares log10.mass and homerange. Adjust the size of points by mass. Label the axes and provide a title.
 ```{r}
-
+homerange %>% 
+  ggplot(aes(x=log10.hra, y=log10.mass, size=mean.mass.g))+
+  geom_point(na.rm=T) +
+  labs(title = "Homerange vs. Mass",
+       x = "Homerange",
+       y = "log10(mass)") +
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5))
 ```
 
 ## That's it! Take a break and I will see you on Zoom!  

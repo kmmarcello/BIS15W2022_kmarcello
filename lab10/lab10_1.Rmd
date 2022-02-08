@@ -191,7 +191,7 @@ elephants %>%
 ```{r}
 life_history %>% 
   ggplot(aes(x=gestation, y=log10(mass), size=mass))+
-  geom_point(col = "cornflowerblue", na.rm=T)
+  geom_point(col = "orange", na.rm=T)
 ```
 
 ```{r}

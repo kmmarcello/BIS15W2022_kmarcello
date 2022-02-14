@@ -133,19 +133,19 @@ For this practice, let's use the [palmerpenguins](https://allisonhorst.github.io
 
 1. Make a bar plot that shows counts of individuals by island. Fill by species, and try both a stacked bar plot and `position="dodge"`.
 ```{r}
-glimpse(peng)
+#glimpse(peng)
 ```
 ```{r}
-names()
+#names()
 ```
 
 ```{r}
- %>% 
-  ggplot(aes(x = taxon, fill = species)) + geom_bar() +
-  coord_flip() +
-  labs(title = "Observations by Taxon in Homerange Data",
-       x = "Taxonomic Group",
-       fill = "Trophic Guild")
+# %>% 
+ # ggplot(aes(x = taxon, fill = species)) + geom_bar() +
+  #coord_flip() +
+  #labs(title = "Observations by Taxon in Homerange Data",
+   #    x = "Taxonomic Group",
+    #   fill = "Trophic Guild")
 ```
 
 ```{r}

@@ -1,6 +1,6 @@
 ---
 title: "Data Visualization: `ggplot` part 1"
-date: "2022-02-03"
+date: "2022-02-14"
 output:
   html_document: 
     theme: spacelab
@@ -359,7 +359,7 @@ names(homerange)
 
 
 ```r
-ggplot(data = homerange, mapping = aes(x = log10.mass, y = log10.hra)) + geom_point()
+ggplot(homerange, aes(log10.mass, log10.hra)) + geom_point() #this one is funky
 ```
 
 ![](lab9_1_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
@@ -577,9 +577,6 @@ mammalia
 
 
 
-
-
-
 2. Are there more herbivores or carnivores in mammals? Make a bar plot that shows their relative numbers.
 
 ```r
@@ -603,7 +600,7 @@ mammalia %>%
   geom_bar()
 ```
 
-![](lab9_1_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
+![](lab9_1_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
 
 3. Make a bar plot that shows the masses of the top 10 smallest mammals.
 
@@ -637,7 +634,7 @@ mammalia %>%
   coord_flip()
 ```
 
-![](lab9_1_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
+![](lab9_1_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
 
 
 ## That's it, let's take a break!   

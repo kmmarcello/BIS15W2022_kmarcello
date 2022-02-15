@@ -127,7 +127,7 @@ names(homerange)
 ```
 
 ```{r}
-ggplot(data = homerange, mapping = aes(x = log10.mass, y = log10.hra)) + geom_point()
+ggplot(homerange, aes(log10.mass, log10.hra)) + geom_point() #this one is funky
 ```
 
 In big data sets with lots of overlapping values, over-plotting can be an issue. `geom_jitter()` is similar to `geom_point()` but it helps with over plotting by adding some random noise to the data and separating some of the individual points.
@@ -216,13 +216,6 @@ mammalia <- homerange %>%
 mammalia
 ```
 
-```{r}
-
-```
-
-```{r}
-
-```
 
 
 2. Are there more herbivores or carnivores in mammals? Make a bar plot that shows their relative numbers.

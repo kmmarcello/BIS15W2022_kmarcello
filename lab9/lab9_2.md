@@ -116,15 +116,15 @@ How about average bill length by sex?
 penguins %>% 
   filter(sex!="NA") %>% 
   group_by(sex) %>% 
-  summarise(ave_bill_length=mean(bill_length_mm))
+  summarise(mean_bill_length=mean(bill_length_mm))
 ```
 
 ```
 ## # A tibble: 2 × 2
-##   sex    ave_bill_length
-##   <fct>            <dbl>
-## 1 female            42.1
-## 2 male              45.9
+##   sex    mean_bill_length
+##   <fct>             <dbl>
+## 1 female             42.1
+## 2 male               45.9
 ```
 
 
@@ -256,18 +256,28 @@ names(homerange)
 
 ```r
 homerange %>% 
-  filter(trophic.guild == "carnivore" & family == "mammalia")
+  filter(trophic.guild == "carnivore" & class == "mammalia")
 ```
 
 ```
-## # A tibble: 0 × 24
-## # … with 24 variables: taxon <chr>, common.name <chr>, class <chr>,
-## #   order <chr>, family <chr>, genus <chr>, species <chr>, primarymethod <chr>,
-## #   N <chr>, mean.mass.g <dbl>, log10.mass <dbl>,
-## #   alternative.mass.reference <chr>, mean.hra.m2 <dbl>, log10.hra <dbl>,
-## #   hra.reference <chr>, realm <chr>, thermoregulation <chr>, locomotion <chr>,
-## #   trophic.guild <chr>, dimension <dbl>, preymass <dbl>, log10.preymass <dbl>,
-## #   PPMR <dbl>, prey.size.reference <chr>
+## # A tibble: 80 × 24
+##    taxon   common.name   class  order  family  genus species primarymethod N    
+##    <chr>   <chr>         <chr>  <chr>  <chr>   <chr> <chr>   <chr>         <chr>
+##  1 mammals giant golden… mamma… afros… chryso… chry… trevel… telemetry*    <NA> 
+##  2 mammals Grant's gold… mamma… afros… chryso… erem… granti  telemetry*    <NA> 
+##  3 mammals arctic fox    mamma… carni… canidae alop… lagopus telemetry*    <NA> 
+##  4 mammals Ethiopian wo… mamma… carni… canidae canis simens… telemetry*    <NA> 
+##  5 mammals culpeo        mamma… carni… canidae pseu… culpae… telemetry*    <NA> 
+##  6 mammals South Americ… mamma… carni… canidae pseu… griseus telemetry*    <NA> 
+##  7 mammals kit fox       mamma… carni… canidae vulp… macroti telemetry*    <NA> 
+##  8 mammals Ruppel's fox  mamma… carni… canidae vulp… ruppel… telemetry*    <NA> 
+##  9 mammals swift fox     mamma… carni… canidae vulp… velox   telemetry*    <NA> 
+## 10 mammals fossa         mamma… carni… eupler… cryp… ferox   telemetry*    <NA> 
+## # … with 70 more rows, and 15 more variables: mean.mass.g <dbl>,
+## #   log10.mass <dbl>, alternative.mass.reference <chr>, mean.hra.m2 <dbl>,
+## #   log10.hra <dbl>, hra.reference <chr>, realm <chr>, thermoregulation <chr>,
+## #   locomotion <chr>, trophic.guild <chr>, dimension <dbl>, preymass <dbl>,
+## #   log10.preymass <dbl>, PPMR <dbl>, prey.size.reference <chr>
 ```
 
 3. Now use a boxplot to visualize the range of body mass by family of mammalian carnivore.

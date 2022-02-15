@@ -75,14 +75,17 @@ life_history %>%
 life_history %>% 
   group_by(order) %>% 
   summarize(mean_mass=mean(mass, na.rm=T)) %>% 
-  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+geom_col()
+  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+
+  geom_col()+
+  coord_flip()
 ```
 
 ```{r}
 life_history %>% 
   group_by(order) %>% 
   summarize(mean_mass=mean(mass, na.rm=T)) %>% 
-  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+geom_col() +
+  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+
+  geom_col() +
   scale_y_log10()
 ```
 
@@ -90,14 +93,20 @@ life_history %>%
 life_history %>% 
   group_by(order) %>% 
   summarize(mean_mass=mean(mass, na.rm=T)) %>% 
-  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+geom_col()+coord_flip()+scale_y_log10()
+  ggplot(aes(x=reorder(order, mean_mass), y=mean_mass))+
+  geom_col()+
+  coord_flip()+
+  scale_y_log10()
 ```
 
 ## Scatterplots
 Scatter plots allow for comparisons of two continuous variables.
 ```{r}
 life_history %>% 
-  ggplot(aes(x=gestation, y=wean_mass)) + geom_point(na.rm=T) + scale_y_log10() + geom_smooth(method="lm")
+  ggplot(aes(x=gestation, y=wean_mass)) + 
+  geom_point(na.rm=T) + 
+  scale_y_log10()
+  #stat_smooth(geom="smooth")
 ```
 
 ## Boxplots
@@ -118,12 +127,18 @@ Remember, you can always use dplyr functions to focus your question, summarize, 
 ```{r}
 life_history %>% 
   filter(order=="Primates") %>% 
-  ggplot(aes(x=family, y=mass))+geom_boxplot(na.rm=T)+scale_y_log10()+coord_flip()
+  ggplot(aes(x=family, y=mass))+
+  geom_boxplot(na.rm=T)+
+  scale_y_log10()+
+  coord_flip()
 ```
 ```{r}
 life_history %>% 
   filter(order=="Rodentia") %>% 
-  ggplot(aes(x=family, y=mass))+geom_boxplot(na.rm=T)+scale_y_log10()+coord_flip()
+  ggplot(aes(x=family, y=mass))+
+  geom_boxplot(na.rm=T)+
+  scale_y_log10()+
+  coord_flip()
 ```
 
 ## Practice  
@@ -178,7 +193,7 @@ The plot looks clean, but it is incomplete. A reader unfamiliar with the data mi
 elephants %>% 
   ggplot(aes(x=age, y=height)) + 
   geom_point() + 
-  geom_smooth(method=lm, se=F)+ #making a best fit line. We dont really need this here.
+  geom_smooth(method=lm, se=F)+ #making a linear best fit line. We don't really need this here.
   labs(title="Elephant Age vs. Height", #adding labels
        x="Age",
        y="Height (cm)")
@@ -187,7 +202,9 @@ elephants %>%
 We can improve the plot further by adjusting the size and face of the text. We do this using `theme()`.
 ```{r}
 elephants %>% 
-  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F) +
+  ggplot(aes(x=age, y=height)) + 
+  geom_point() + 
+  geom_smooth(method=lm, se=F) +
   labs(title = "Elephant Age vs. Height", # labs = labels
        x = "Age",
        y = "Height (cm)") +
@@ -199,7 +216,9 @@ elephants %>%
 The `rel()` option changes the relative size of the title to keep things consistent. Adding `hjust` allows control of title position.
 ```{r}
 elephants %>% 
-  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F) +
+  ggplot(aes(x=age, y=height)) + 
+  geom_point() + 
+  geom_smooth(method=lm, se=F) +
   labs(title = "Elephant Age vs. Height",
        x = "Age",
        y = "Height (cm)") +
@@ -210,7 +229,8 @@ elephants %>%
 There are lots of options for aesthetics. An aesthetic can be assigned to either numeric or categorical data. `fill` is a common grouping option; notice that an appropriate key is displayed when you use one of these options.
 ```{r}
 elephants %>% 
-  ggplot(aes(x=sex, fill=sex))+geom_bar()+
+  ggplot(aes(x=sex, fill=sex))+
+  geom_bar()+
   labs(title = "# Elephants by Sex",
        x = "Sex",
        y = NULL) +

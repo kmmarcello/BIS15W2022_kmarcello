@@ -1,0 +1,513 @@
+---
+title: "R cheatsheet"
+author: "Kaylah Marcello"
+date: "2/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## ggplot
+```{r}
+elephants %>% 
+  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F) +
+  labs(title = "Elephant Age vs. Height",
+       x = "Age",
+       y = "Height") +
+  theme(plot.title = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12))
+```
+
+```{r}
+homerange %>% 
+  ggplot(aes(x = thermoregulation, fill = thermoregulation)) +
+  geom_bar()+
+  labs(title = "Thermoregulation Counts",
+       x = "Thermoregulation Type",
+       y = "# Individuals")+ 
+  theme(plot.title = element_text(size = rel(1.25)))
+```
+
+```{r}
+homerange %>% 
+  ggplot(aes(x = taxon, fill = trophic.guild)) +
+  geom_bar(position = "dodge") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  labs(title = "Observations by Taxon in Homerange Data",
+       x = "Taxonomic Group",
+       fill= "Trophic Guild")
+```
+
+```{r}
+elephants %>% 
+  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F) +
+  labs(title = "Elephant Age vs. Height",
+       x = "Age",
+       y = "Height")
+```
+
+```{r}
+homerange %>% 
+  filter(family=="salmonidae") %>% 
+  ggplot(aes(x=common.name, y=log10.mass))+
+  geom_col()
+```
+
+```{r}
+homerange %>% 
+  ggplot(aes(x=trophic.guild)) + 
+  geom_bar()
+```
+
+```{r}
+homerange %>% 
+  group_by(class) %>% 
+  summarize(mean_body_wt=mean(log10.mass)) %>% 
+  ggplot(aes(x=class, y=mean_body_wt))+
+  geom_col()
+```
+
+```{r}
+homerange %>% 
+  filter(class=="mammalia") %>% 
+  group_by(trophic.guild) %>% 
+  count() %>% 
+  ggplot(aes(y=trophic.guild, x=n))+
+  geom_col()
+```
+
+```{r}
+homerange %>% 
+  filter(class=="mammalia") %>% 
+  top_n(-10, log10.mass) %>% 
+  ggplot(aes(x=common.name, y=log10.mass))+
+  geom_col()+
+  coord_flip()
+```
+
+```{r}
+homerange %>% 
+  filter(class=="mammalia") %>% 
+  top_n(-10, log10.mass) %>% 
+  ggplot(aes(x=reorder(common.name, log10.mass), y=log10.mass))+
+  geom_col()+
+  coord_flip()
+```
+
+```{r}
+penguins %>% 
+  filter(sex!="NA") %>% 
+  group_by(sex) %>% 
+  summarise(ave_bill_length=mean(bill_length_mm)) %>% 
+  ggplot(aes(x=sex, y=ave_bill_length)) +
+  geom_col()
+```
+
+```{r}
+homerange %>% 
+  ggplot(aes(x = class, y = log10.mass)) +
+  geom_boxplot()
+```
+
+```{r}
+homerange %>% 
+  filter(class=="mammalia" & trophic.guild=="carnivore") %>% 
+  select(family, trophic.guild, log10.mass) %>% 
+  ggplot(aes(x=family, y=log10.mass))+
+  geom_boxplot()+
+  coord_flip()
+```
+
+```{r}
+life_history %>% 
+  group_by(order) %>% 
+  summarise(mean_mass=mean(mass, na.rm=T)) %>% 
+  ggplot(aes(x=order, y=mean_mass)) + 
+  geom_col() + 
+  coord_flip() + 
+  scale_y_log10()
+```
+
+```{r}
+life_history %>% 
+  ggplot(aes(x=gestation, y=wean_mass)) + geom_point(na.rm=T) + scale_y_log10()
+```
+
+## pivot
+```{r}
+heartrate %>% 
+  pivot_longer(-patient, #patient does not pivot
+               names_to = "drug", 
+               values_to = "heartrate"
+               )
+```
+
+```{r}
+billboard2 <- 
+  billboard %>% 
+  pivot_longer(wk1:wk76, # a range of columns
+               names_to = "week",
+               values_to = "rank",
+               values_drop_na = TRUE #this will drop the NA's
+               )
+billboard2
+```
+
+```{r}
+billboard %>% 
+   pivot_longer(
+   cols = starts_with("wk"),
+   names_to = "week",
+   names_prefix = "wk",
+   values_to = "rank",
+   values_drop_na = TRUE)
+```
+
+```{r}
+tb_data %>% 
+  pivot_wider(names_from = "key", #the observations under key will become new columns
+              values_from = "value")
+```
+
+```{r}
+edu_level %>% 
+pivot_wider(names_from = (education_level), #new column names come from the education_level column
+                values_from = c(mean_income, n)) #values come from two separate columns
+```
+
+## `NAs`
+```{r}
+naniar::miss_var_summary(life_history)
+```
+
+```{r}
+life_history %>%
+  group_by(order) %>%
+  select(order, wean_mass) %>% 
+  naniar::miss_var_summary(order=T)
+```
+
+```{r}
+msleep %>%  
+  mutate(conservation_modified = na_if(conservation, "domesticated"))%>% 
+  count(conservation_modified, sort = T) #previously there were only 29 NA's
+```
+
+```{r}
+is.na(msleep)
+```
+
+```{r}
+any_na(msleep)
+```
+
+```{r}
+msleep %>% 
+  summarize(number_nas = sum(is.na(msleep)))
+```
+
+```{r}
+msleep %>% 
+  summarise_all(~(sum(is.na(.))))%>% 
+  pivot_longer(everything(),
+    names_to= "variables",
+    values_to = "num_nas") %>% 
+  arrange(desc(num_nas))
+```
+
+```{r}
+amniota %>% 
+  summarise_all(~(sum(is.na(.))))%>% 
+  pivot_longer(everything(),
+    names_to= "variables",
+    values_to = "num_nas") %>% 
+  arrange(desc(num_nas))
+```
+
+```{r}
+amniota_tidy <- amniota %>% 
+  na_if("-999")
+```
+##extra
+```{r}
+univ_calif_final <- univ_calif_final %>% 
+  separate(instnm, c("univ", "campus"), sep="-")
+univ_calif_final
+```
+
+##`across()`
+```{r}
+library(palmerpenguins)
+```
+
+```{r}
+penguins %>%
+  summarize(across(c(species, island, sex), n_distinct))
+```
+
+```{r}
+penguins %>%
+  summarize(across(contains("mm"), mean, na.rm=T))
+```
+
+```{r}
+penguins %>%
+  summarise(across(!c(species, island, sex), 
+                   n_distinct))
+```
+
+## `count()`
+```{r}
+penguins %>% 
+  count(island, sort = T) #sort=T sorts the column in descending order
+```
+
+```{r}
+penguins %>% 
+  group_by(island) %>% 
+  summarize(n=n())
+```
+
+```{r}
+penguins %>% 
+  count(island, species, sex, sort = T) %>% 
+  arrange(island)
+```
+
+```{r}
+penguins %>% 
+  tabyl(island, species)#for making reports
+```
+
+## `summarize()`
+```{r}
+msleep %>% 
+    filter(bodywt > 200) %>% 
+    summarize(mean_sleep_lg = mean(sleep_total), 
+              min_sleep_lg = min(sleep_total),
+              max_sleep_lg = max(sleep_total),
+              total = n())
+```
+
+```{r}
+msleep %>% 
+  filter(order=="Primates") %>% 
+  summarize(mean_bodywt=mean(bodywt),
+            min_bodywt=min(bodywt),
+            max_bodywt=max(bodywt),
+            n_samples=n())
+```
+
+```{r}
+msleep %>% 
+  summarize(ngenera=n_distinct(genus))
+```
+
+##combination, `arrange()`, `mutate()`, `ifelse()`, `filter()`
+```{r}
+msleep24 <- msleep %>% 
+  mutate(sleep_total_24=sleep_total/24) %>% 
+  select(name, vore, sleep_total_24) %>% 
+  filter(!is.na(vore)) %>% 
+  filter(sleep_total_24<0.3) %>% 
+  arrange(desc(sleep_total_24))
+msleep24
+```
+
+```{r}
+superhero_powers <- janitor::clean_names(superhero_powers)
+```
+
+```{r}
+tabyl(superhero_info, alignment)
+```
+
+```{r}
+neutral <- superhero_info %>% 
+  filter(alignment=="neutral")
+```
+
+```{r}
+fish %>%
+  select(lakeid, scalelength) %>%
+  filter(lakeid == "AL")
+```
+
+```{r}
+mammals %>% 
+  select(family, genus, species, gestation) %>% 
+  filter(gestation>=15)
+```
+
+```{r}
+fish %>% 
+  select(lakeid, radii_length_mm) %>% 
+  filter(lakeid=="AL" | lakeid=="AR") %>% 
+  filter(between(radii_length_mm, 2, 4)) %>% 
+  arrange(desc(radii_length_mm))
+```
+
+```{r}
+fish %>% 
+  select(lakeid, scalelength) %>% 
+  arrange(scalelength)
+```
+
+```{r}
+fish %>% 
+  select(lakeid, scalelength) %>% 
+  arrange(desc(scalelength))
+```
+
+```{r}
+fish %>% 
+  select(lakeid, length, fish_id, scalelength) %>% 
+  filter(lakeid=="AL") %>% 
+  arrange(fish_id)
+```
+
+```{r}
+fish %>% 
+  mutate(length_mm = length*10) %>% 
+  select(fish_id, length, length_mm)
+```
+
+```{r}
+mammals %>% 
+  select(genus, species, newborn) %>%
+  mutate(newborn_new = ifelse(newborn == -999.00, NA, newborn))%>% 
+  arrange(newborn)
+```
+
+```{r}
+fish %>%
+  mutate(length_half=length/2) %>% 
+  select(fish_id, length, length_half)
+```
+
+```{r}
+mammals %>% 
+  select(family, genus, species, max_life) %>% 
+  mutate(max_life_new= ifelse(max_life==-999, NA, max_life)) %>% 
+  arrange(max_life)
+```
+
+## `filter()`
+Unlike `select()`, `filter()` allows us to extract data that meet specific criteria within a variable. Let's say that we are interested only in the fish that occur in lake "AL". We can use `filter()` to extract these observations.
+
+```{r}
+filter(fish, lakeid == "AL")
+```
+
+```{r}
+filter(fish, length == 3500)
+```
+
+```{r}
+filter(fish, lakeid != "AL")
+```
+
+```{r}
+filter(fish, length %in% c(167, 175))
+```
+
+```{r}
+filter(fish, between(scalelength, 2.5, 3))
+```
+
+```{r}
+filter(fish, near(radii_length_mm, 2, tol = 0.2))
+```
+
+```{r}
+filter(fish, near(scalelength, 8, tol=0.5)) #tolerance
+```
+
+```{r}
+filter(fish, lakeid == "AL" & length== 350)
+```
+
+```{r}
+filter(fish, lakeid == "AL" | length > 350)
+```
+
+```{r}
+filter(fish, length > 400, (scalelength > 11 | radii_length_mm > 8))
+```
+
+## Tidyverse
+The [tidyverse](www.tidyverse.org) is an "opinionated" collection of packages that make workflow in R easier. The packages operate more intuitively than base R commands and share a common organizational philosophy.  
+![*Data Science Workflow in the Tidyverse.*](tidy-1.png)  
+
+## dplyr
+The first package that we will use that is part of the tidyverse is `dplyr`. `dplyr` is used to transform data frames by extracting, rearranging, and summarizing data such that they are focused on a question of interest. This is very helpful,  especially when wrangling large data, and makes dplyr one of most frequently used packages in the tidyverse. The two functions we will use most are `select()` and `filter()`.  
+
+## `select()`
+Select allows you to pull out columns of interest from a dataframe. To do this, just add the names of the columns to the `select()` command. The order in which you add them, will determine the order in which they appear in the output.
+
+```{r}
+select(fish, ends_with("id"))
+```
+
+```{r}
+select(fish, contains("fish"))
+```
+
+```{r}
+anyNA(mammals)
+```
+
+# getting dataframes
+```{r}
+dataframe <- readr::read_csv("example/dataframe.csv")
+```
+
+# structure of data
+```{r}
+dim(hbirds)
+```
+
+```{r}
+str(hbirds)
+```
+
+```{r}
+glimpse(hot_springs)
+```
+
+```{r}
+summary(fish)
+```
+
+```{r}
+nrow() #gives the numbers of rows.
+ncol() #of columns
+```
+
+```{r}
+head(fish, n = 10)
+```
+
+```{r}
+tail(fish, n = 10)
+```
+
+```{r}
+table(fish$lakeid)
+```
+
+```{r}
+little_fish <- subset(fish, length<=110)
+little_fish
+```
+
+## intro
+```{r}
+getwd()
+```
+```{r}
+setwd()
+```
+

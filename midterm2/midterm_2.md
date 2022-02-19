@@ -1500,6 +1500,7 @@ population_longer %>%
 ```
 
 ![](midterm_2_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+
 China and India apear to have exponential growth.
 
 ## Income

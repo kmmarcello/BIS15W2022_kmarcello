@@ -209,6 +209,7 @@ population_longer %>%
         axis.text = element_text(size = 4),
         axis.title = element_text(size = 10))
 ```  
+
 China and India apear to have exponential growth.
 
 ## Income

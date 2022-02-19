@@ -1394,6 +1394,7 @@ life_expectancy_long %>%
 ## 10 United Kingdom                 71.1
 ## # … with 177 more rows
 ```
+
 Country with highest average life expectancy from 1920-2020: Sweden  
 Country with lowest average life expectancy from 1920-2020: Central African Republic
 
@@ -1459,7 +1460,7 @@ population_total_100 <- population_longer %>%
               values_from = population) %>% 
   mutate(pop_growth_100= year_2020-year_1920) %>% 
   arrange(desc(pop_growth_100))
-population_total_100
+population_total_100  
 ```
 
 ```
@@ -1517,7 +1518,7 @@ income_100 <- income_longer %>%
               values_from = income) %>% 
   mutate(income_100= year_2020-year_1920) %>% 
   arrange(desc(income_100))
-income_100
+income_100  
 ```
 
 ```

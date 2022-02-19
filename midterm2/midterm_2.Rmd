@@ -176,7 +176,9 @@ life_expectancy_long %>%
   theme(plot.title = element_text(size = 12, face = "bold"),
         axis.text = element_text(size = 4),
         axis.title = element_text(size = 10))
-```
+```  
+
+Oil reserves were discovered in 1939.
 
 ## Population Growth
 6. (3 points) Which 5 countries have had the highest population growth over the past 100 years (1920-2020)?  

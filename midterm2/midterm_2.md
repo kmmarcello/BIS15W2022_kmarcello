@@ -1448,6 +1448,8 @@ life_expectancy_long %>%
 
 ![](midterm_2_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 
+Oil reserves were discovered in 1939.
+
 ## Population Growth
 6. (3 points) Which 5 countries have had the highest population growth over the past 100 years (1920-2020)?  
 

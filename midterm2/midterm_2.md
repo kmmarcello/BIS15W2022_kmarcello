@@ -1555,6 +1555,7 @@ income_longer %>%
 ```
 
 ![](midterm_2_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+Countries with the greatest increase in GDP are Qatar, Luxembourg, Singapore, Ireland, and Brunei.
 
 9. (3 points) Create three new objects that restrict each data set (life expectancy, population, income) to the years 1920-2020. Hint: I suggest doing this with the long form of your data. Once this is done, merge all three data sets using the code I provide below. You may need to adjust the code depending on how you have named your objects. I called mine `life_expectancy_100`, `population_100`, and `income_100`. For some of you, learning these `joins` will be important for your project.  
 
@@ -1656,7 +1657,27 @@ gapminder_join
 
 10. (4 points) Use the joined data to perform an analysis of your choice. The analysis should include a comparison between two or more of the variables `life_expectancy`, `population`, or `income.`  
 
+For the 5 countries with the greatest GDP growth, how has their population growth changed over the 100 years?
 
+Countries with the greatest increase in GDP are Qatar, Luxembourg, Singapore, Ireland, and Brunei.
 
+```r
+income_pop_growth <- gapminder_join %>% 
+  select(country, income, population) %>% 
+  filter(country=="Qatar" | country=="Luxembourg" | country=="Singapore" | country=="Brunei" | country=="Ireland") %>%
+  ggplot(aes(x=income, y=population, color=country, group=country))+
+  geom_line()+
+  theme_igray()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+  labs(title = "Population growth in terms of GDP Growth Per Person During a 100 year time span",
+       x = "income",
+       y = "population")+
+  theme(plot.title = element_text(size = 10, face = "bold"),
+        axis.text = element_text(size = 4),
+        axis.title = element_text(size = 10))
+income_pop_growth
+```
 
+![](midterm_2_files/figure-html/unnamed-chunk-31-1.png)<!-- -->
+For Singapore and Ireland, as the GDP increases per person, the population increases. Brunei and Luxembourg do not have an increase of population when there is an increase of GDP per person. Qatar has a relatively steady population as GDP per person increases with a huge increase in population between ~110,000 and 130,000 GDP increase per person. This spike might correlate with the spike in income during the 1960's and 1970's.
 

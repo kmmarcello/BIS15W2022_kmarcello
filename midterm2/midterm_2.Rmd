@@ -72,7 +72,7 @@ population_longer <- population_total %>%
 population_longer
 ```
 
-## Income_per_person
+## income_per_person
 ```{r}
 names(income_per_person)
 ```
@@ -93,7 +93,7 @@ income_longer <- income_per_person %>%
 income_longer
 ```
 
-## life expectancy
+## life_expectancy
 ```{r}
 names(life_expectancy)
 ```

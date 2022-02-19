@@ -560,7 +560,7 @@ population_longer
 ## # … with 58,685 more rows
 ```
 
-## Income_per_person
+## income_per_person
 
 ```r
 names(income_per_person)
@@ -906,7 +906,7 @@ income_longer
 ## # … with 46,503 more rows
 ```
 
-## life expectancy
+## life_expectancy
 
 ```r
 names(life_expectancy)

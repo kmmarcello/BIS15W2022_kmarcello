@@ -74,18 +74,19 @@ We don't need to here, but for demonstration purposes we can name the elements i
 names <- list.files(path = "data/spiders", pattern = ".csv")
 names
 ```
-
+#getting rid of the space between yolo" ".csv
 ```{r}
 names_list <- strsplit(names, split = " .csv")
 names_list
 ```
-
+#unlist and put in a vector
 ```{r}
 names_vec <- unlist(names_list)
 names_vec
 ```
-What is vec short for?
+What is vec short for? vector
 
+#this is to make it so it lists only the names.
 ```{r}
 names(spider_list) <- names_vec
 names(spider_list)
@@ -93,6 +94,10 @@ names(spider_list)
 
 ## Practice
 1. Now that our list elements are named, how could we access the Butte County data by name?
+```{r}
+spider_list$Butte
+```
+-or-
 ```{r}
 spider_list[["Butte"]]
 ```
@@ -235,7 +240,10 @@ dateformat5 <- "20200922 170000"
 ## Practice 
 1. Convert each of the examples above using lubridate.
 ```{r}
-
+ymd(dateformat1)
+```
+```{r}
+mdy(dateformat2)
 ```
 
 2. Have a look at these options.
@@ -261,13 +269,13 @@ It will be very helpful if you can install the following packages before the nex
 ```{r}
 #install.packages("devtools")
 #library(devtools)
-#devtools::install_github("dkahle/ggmap")
+devtools::install_github("dkahle/ggmap", force = TRUE)
 ```
 
 `remotes` and `albersusa`
 ```{r, message = FALSE}
 #install.packages("remotes")
-#remotes::install_github("hrbrmstr/albersusa")
+#remotes::install_github("hrbrmstr/albersusa", force = TRUE)
 ```
 
 ## That's it! Take a break and I will see you on Zoom!  

@@ -34,11 +34,11 @@ We will use two separate data sets for this homework.
 
 1. Load the `grizzly` data and evaluate its structure. As part of this step, produce a summary that provides the range of latitude and longitude so you can build an appropriate bounding box.
 ```{r}
-
+grizzly <- readr::read_csv("data/bear-sightings.csv")
 ```
 
 ```{r}
-
+summary(grizzly)
 ```
 
 2. Use the range of the latitude and longitude to build an appropriate bounding box for your map.
@@ -66,10 +66,6 @@ We will use two separate data sets for this homework.
 ```
 
 6. How many distinct wolf populations are included in this study? Mae a new object that restricts the data to the wolf populations in the lower 48 US states.
-```{r}
-
-```
-
 ```{r}
 
 ```

@@ -249,7 +249,7 @@ penguins %>%
 
 ```{r}
 penguins %>%
-  summarize(across(contains("mm"), mean, na.rm=T))
+  summarize(across(contains("mm"), mean, na.rn=T))
 ```
 
 ```{r}

@@ -4,7 +4,7 @@ This repository is for help in R. So, you won't be freaking out all the time whe
 
 **Lab 1:**
 1. Background of R, Github, R cheatsheets, R studio, 
-2. calculations, r/Rstudio, knit, Rmarkdown
+2. calculations, r/Rstudio, knit, Rmarkdown \
 **Lab 2:**
 1. clone/download, repos, data classes, NAs
 2. vectors, matrices, vector elements, combne vectors into a matrix, summary functions
